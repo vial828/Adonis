@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Woundings xml_version="1" xmlns="http://cypress.com/xsd/cychipresourcewoundings_v1">
+  <BooleanWounding name="CAN_FD">
+    <Block name="canfd.chan"/>
+  </BooleanWounding>
+  <BooleanWounding name="CRYPTO">
+    <Block name="mxcrypto"/>
+  </BooleanWounding>
+  <BooleanWounding name="DIRDRIVELCD">
+    <Block name="lcd"/>
+  </BooleanWounding>
+  <BooleanWounding name="GFX">
+    <Block name="gfxss"/>
+  </BooleanWounding>
+
+  <NaWounding name="USB_TYPE">
+    <Block name="usb"/>
+    <Block name="usbhs"/>
+  </NaWounding>
+
+  <!-- TODO: enable once mxs22lppass_v1.cydatasrc is updated with Block type="ctdac"
+  <RemoveListWounding name="DAC12_REMOVED">
+    <Block name="pass.ctdac"/>
+  </RemoveListWounding>
+  -->
+  <RemoveListWounding name="ETH_REMOVED">
+    <Block name="eth"/>
+  </RemoveListWounding>
+  <!-- TODO: enable once mxtdm_v3.cydatasrc is updated with Block type="ch"
+  <RemoveListWounding name="I2S_REMOVED">
+    <Block name="tdm.ch"/>
+  </RemoveListWounding>
+  -->
+  <RemoveListWounding name="I3C_REMOVED">
+    <Block name="i3c"/>
+  </RemoveListWounding>
+  <RemoveListWounding name="LIN_REMOVED">
+    <Block name="lin"/>
+  </RemoveListWounding>
+  <RemoveListWounding name="LPCOMP_REMOVED">
+    <Block name="lpcomp.comp"/>
+  </RemoveListWounding>
+  <!-- TODO: enable once mxs22lppass_v1.cydatasrc is updated with Block type="ctb"
+  <RemoveListWounding name="OPAMP_REMOVED">
+    <Block name="pass.ctb.oa"/>
+  </RemoveListWounding>
+  -->
+  <!-- TODO: enable once mxpdm_v1.cydatasrc is updated with Block type="ch"
+  <RemoveListWounding name="PDM_REMOVED">
+    <Block name="pdm.ch"/>
+  </RemoveListWounding>
+  -->
+  <!-- TODO: enable once mxs22lppass_v1.cydatasrc is updated with Block type="ctb"
+  <RemoveListWounding name="SAMPLEHOLD_REMOVED">
+    <Block name="pass.ctb.sample"/>
+  </RemoveListWounding>
+  -->
+  <!-- TODO: enable once mxs22lppass_v1.cydatasrc is updated with Block type="sar"
+  <RemoveListWounding name="SAR12_REMOVED">
+    <Block name="pass.sar"/>
+  </RemoveListWounding>
+  -->
+  <RemoveListWounding name="SCB_REMOVED">
+    <Block name="scb"/>
+  </RemoveListWounding>
+  <RemoveListWounding name="SDHC_REMOVED">
+    <Block name="sdhc"/>
+  </RemoveListWounding>
+  <RemoveListWounding name="SMIF_REMOVED">
+    <Block name="smif.core"/>
+  </RemoveListWounding>
+  <RemoveListWounding name="TIMERCOUNTERPWM_REMOVED">
+    <Block name="tcpwm.group.cnt"/>
+  </RemoveListWounding>
+</Woundings>

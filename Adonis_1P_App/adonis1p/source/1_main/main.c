@@ -1,0 +1,187 @@
+/**
+  ******************************************************************************
+  * @file    main.c
+  * @author  xuhua.huang@metextech.com
+  * @date    2024/03/013
+  * @version V0.01
+  * @brief   Brief description.
+  *
+  *   Detailed description starts here.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2024 SMOORE TECHNOLOGY CO.,LTD.
+  * All rights reserved.</center></h2>
+  *
+  ******************************************************************************
+  * Change Logs:
+  * Date            Version    Author                       Notes
+  * 2024-03-013     V0.01      xuhua.huang@metextech.com    the first version
+  *
+  ******************************************************************************
+  */
+
+/*******************************************************************************
+*        Header Files
+*******************************************************************************/
+
+/* Header file includes */
+#include <string.h>
+#include "stdlib.h"
+#include <inttypes.h>
+
+/* FreeRTOS header file */
+#include <FreeRTOS.h>
+#include <task.h>
+
+
+#include "ota_context.h"
+#if (OTA_SERVICE_SUPPORT == 1)
+/* OTA related header files */
+#include "cy_ota_api.h"
+#endif//#if (OTA_SERVICE_SUPPORT == 1)
+
+#include "sm_log.h"
+
+#include "platform_io.h"
+#include "task_bt_service.h"
+#include "task_charge_service.h"
+#include "task_heatting_service.h"
+#include "task_ui_service.h"
+#include "task_system_service.h"
+#include "task_usb_service.h"
+#include "driver_heater.h"
+#include "driver_detector.h"
+#include "system_param.h"
+
+
+
+
+/******************************************************************************
+* TASK config
+*******************************************************************************/
+#define TASK_BLE_STACK_SIZE 			(1024u*1u)
+#define TASK_BLE_PRIORITIES 			(configMAX_PRIORITIES - 4)
+
+#define TASK_PM_STACK_SIZE 				(1024u*1u)
+#define TASK_PM_PRIORITIES 				(configMAX_PRIORITIES - 4)//20240427  charge_service-->pm_service(power serivce)
+
+#define TASK_HEAT_STACK_SIZE 		 	(1024u*1u)
+#define TASK_HEAT_PRIORITIES 			(configMAX_PRIORITIES - 4)
+
+
+#define TASK_USB_STACK_SIZE 			(1024u*1u)
+#define TASK_USB_PRIORITIES 			(configMAX_PRIORITIES - 4)
+
+#define TASK_UI_STACK_SIZE 		 		(1024u*1u)
+#define TASK_UI_PRIORITIES 				(configMAX_PRIORITIES - 4)
+
+#define TASK_SYSTEM_STACK_SIZE 			(1024u*1u)
+#define TASK_SYSTEM_PRIORITIES 			(configMAX_PRIORITIES - 4)
+
+/**
+  * @brief  init and task create
+  * @param  pvParam:    
+  * @return None
+  * @note   None
+  */
+void task_main(void *pvParam)
+{
+
+    BaseType_t rtos_result;
+
+    sm_log_semphore_mutex_create();
+    /* 应用设备初始化 */
+    device_init();
+    sys_start_key_status();
+    sys_start_shipping_mode_pro();
+
+#if (OTA_SERVICE_SUPPORT == 1)
+    cy_ota_storage_validated();
+#endif
+    sm_log(SM_LOG_INFO, "========Adonis System Start========\r\n");
+    sm_log(SM_LOG_INFO, "%s Compile time: %s ,%s\r\n", __FUNCTION__, __DATE__, __TIME__);
+
+    //sm_log(SM_LOG_INFO, "APP Version: %d.%d.%d\r\n", APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_BUILD);
+
+    system_param_info_init();
+#if 0
+#if ((defined ENABLE_PCTOOL_SHELL) || (defined JLINK_SHELL_OUT))
+    shell_init();
+#endif
+#endif
+    bt_init();
+
+	rtos_result = xTaskCreate(task_usb_service, "TASK USB_SERVICE", TASK_USB_STACK_SIZE, NULL, TASK_USB_PRIORITIES, get_task_usb_handle());
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK USB_SERVICE creation failed\n");
+    }
+
+	rtos_result = xTaskCreate(task_bt_service, "TASK BT_SERVICE", TASK_BLE_STACK_SIZE, NULL, TASK_BLE_PRIORITIES, get_task_bt_handle());
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK BT_SERVICE creation failed\n");
+    }
+	rtos_result = xTaskCreate(task_charge_service, "TASK PM_SERVICE", TASK_PM_STACK_SIZE, NULL, TASK_PM_PRIORITIES, get_task_charge_handle());
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK PM_SERVICE creation failed\n");
+    }
+
+	rtos_result = xTaskCreate(task_heatting_service, "TASK HEATTING_SERVICE", TASK_HEAT_STACK_SIZE, NULL, TASK_HEAT_PRIORITIES, get_task_heatting_handle());
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK HEATTING_SERVICE creation failed\n");
+    }
+
+	rtos_result = xTaskCreate(task_ui_service, "TASK UI_SERVICE", TASK_UI_STACK_SIZE, NULL, TASK_UI_PRIORITIES, get_task_ui_handle());
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK UI_SERVICE creation failed\n");
+    }
+
+	rtos_result = xTaskCreate(task_system_service, "TASK SYSTEM_SERVICE", TASK_SYSTEM_STACK_SIZE, NULL, TASK_SYSTEM_PRIORITIES, get_task_system_handle());
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK SYSTEM_SERVICEcreation failed\n");
+    }
+
+    vTaskDelete(NULL);
+}
+
+/**
+  * @brief  主函数入口
+  * @param  None
+  * @return None
+  * @note   None
+  */
+int main()
+{
+    BaseType_t rtos_result;
+
+	cy_rslt_t cy_result;
+	/* Initialize the board support package */
+	cy_result = cybsp_init();
+	if (CY_RSLT_SUCCESS != cy_result)
+	{
+		CY_ASSERT(0);
+	}
+	/* Enable global interrupts */
+	__enable_irq();
+
+    rtos_result = xTaskCreate(task_main, "TASK MAIN", (configMINIMAL_STACK_SIZE * 8),
+                                NULL, (configMAX_PRIORITIES - 4), NULL);
+    if(pdPASS != rtos_result)
+    {
+        sm_log(SM_LOG_ERR, "TASK MAIN creation failed\n");
+    }
+
+    /* Start the FreeRTOS scheduler */
+    vTaskStartScheduler();
+
+    /* Should never get here */
+    CY_ASSERT(0);
+}
+

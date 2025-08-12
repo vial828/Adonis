@@ -1,0 +1,2 @@
+*.pdom filter=lfs diff=lfs merge=lfs -text
+Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.ui/global-build.log filter=lfs diff=lfs merge=lfs -text

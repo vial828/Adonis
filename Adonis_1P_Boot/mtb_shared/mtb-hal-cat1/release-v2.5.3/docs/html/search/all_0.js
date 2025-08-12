@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['_5fcyhal_5faudioss_5fconfigurator_5ft_0',['_cyhal_audioss_configurator_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__audioss__configurator__t',1,'']]],
+  ['_5fcyhal_5faudioss_5finterface_5ft_1',['_cyhal_audioss_interface_t',['../struct__cyhal__audioss__interface__t.html',1,'']]],
+  ['_5fcyhal_5faudioss_5ft_2',['_cyhal_audioss_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__audioss__t',1,'']]],
+  ['_5fcyhal_5fbuffer_5finfo_5ft_3',['_cyhal_buffer_info_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__buffer__info__t',1,'']]],
+  ['_5fcyhal_5fbuffer_5finfo_5ft_2eaddr_4',['_cyhal_buffer_info_t.addr',['../group__group__hal__impl__hw__types.html#union__cyhal__buffer__info__t_8addr',1,'']]],
+  ['_5fcyhal_5fcan_5fconnect_5fsignal_5',['_cyhal_can_connect_signal',['../group__group__hal__impl__interconnect.html#ga0681e91ab0d3792eff85a723a60ed301',1,'cyhal_interconnect_impl.h']]],
+  ['_5fcyhal_5fconnect_5fsignal_6',['_cyhal_connect_signal',['../group__group__hal__impl__interconnect.html#gac453611af1fda3452f2f73113c4ea3ee',1,'cyhal_interconnect_impl.h']]],
+  ['_5fcyhal_5fdisconnect_5fsignal_7',['_cyhal_disconnect_signal',['../group__group__hal__impl__interconnect.html#gabf43f8f45582c42a17ea04ba5f015bf4',1,'cyhal_interconnect_impl.h']]],
+  ['_5fcyhal_5fethernet_5fgmii_5fpins_5ft_8',['_cyhal_ethernet_gmii_pins_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__ethernet__gmii__pins__t',1,'']]],
+  ['_5fcyhal_5fethernet_5fmii_5fpins_5ft_9',['_cyhal_ethernet_mii_pins_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__ethernet__mii__pins__t',1,'']]],
+  ['_5fcyhal_5fethernet_5frgmii_5fpins_5ft_10',['_cyhal_ethernet_rgmii_pins_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__ethernet__rgmii__pins__t',1,'']]],
+  ['_5fcyhal_5fethernet_5frmii_5fpins_5ft_11',['_cyhal_ethernet_rmii_pins_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__ethernet__rmii__pins__t',1,'']]],
+  ['_5fcyhal_5fipc_5fcomm_5fchannel_12',['_CYHAL_IPC_COMM_CHANNEL',['../group__group__hal__ipc.html#gaa40b59947c5af2e71fd47f9fdfd41f30',1,'cyhal_ipc.h']]],
+  ['_5fcyhal_5fipc_5fmax_5fprocesses_5fper_5fqueue_13',['_CYHAL_IPC_MAX_PROCESSES_PER_QUEUE',['../group__group__hal__ipc.html#gaabe3ef99ea220165d1d92f9713a7d81b',1,'cyhal_ipc.h']]],
+  ['_5fcyhal_5fipc_5fqueue_5fprocess_5finfo_5ft_14',['_cyhal_ipc_queue_process_info_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__ipc__queue__process__info__t',1,'']]],
+  ['_5fcyhal_5fipc_5fqueues_5fper_5fchannel_15',['_CYHAL_IPC_QUEUES_PER_CHANNEL',['../group__group__hal__ipc.html#gacceea718c77e9b2316e3965396e7ab4c',1,'cyhal_ipc.h']]],
+  ['_5fcyhal_5fsdxx_5fdata_5ftransfer_5fstatus_5ft_16',['_cyhal_sdxx_data_transfer_status_t',['../group__group__hal__impl__hw__types.html#ga4c8ca0fbe680910a4a1059b24af6be33',1,'cyhal_hw_types.h']]],
+  ['_5fcyhal_5fsdxx_5fnot_5frunning_17',['_CYHAL_SDXX_NOT_RUNNING',['../group__group__hal__impl__hw__types.html#gga4c8ca0fbe680910a4a1059b24af6be33a368ff869cdb24a321d3da688a1d26500',1,'cyhal_hw_types.h']]],
+  ['_5fcyhal_5fsdxx_5ft_18',['_cyhal_sdxx_t',['../group__group__hal__impl__hw__types.html#struct__cyhal__sdxx__t',1,'']]],
+  ['_5fcyhal_5fsdxx_5fwait_5fboth_19',['_CYHAL_SDXX_WAIT_BOTH',['../group__group__hal__impl__hw__types.html#gga4c8ca0fbe680910a4a1059b24af6be33afac7177299deca53e008ef0a984f5a1e',1,'cyhal_hw_types.h']]],
+  ['_5fcyhal_5fsdxx_5fwait_5fcmd_5fcomplete_20',['_CYHAL_SDXX_WAIT_CMD_COMPLETE',['../group__group__hal__impl__hw__types.html#gga4c8ca0fbe680910a4a1059b24af6be33ae8959540814b72dc9da8734e16af2e27',1,'cyhal_hw_types.h']]],
+  ['_5fcyhal_5fsdxx_5fwait_5fxfer_5fcomplete_21',['_CYHAL_SDXX_WAIT_XFER_COMPLETE',['../group__group__hal__impl__hw__types.html#gga4c8ca0fbe680910a4a1059b24af6be33ae0ce7792911e7d6ba534c57a58ee7f95',1,'cyhal_hw_types.h']]]
+];

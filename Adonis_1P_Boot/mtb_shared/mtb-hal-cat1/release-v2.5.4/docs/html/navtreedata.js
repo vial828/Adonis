@@ -1,0 +1,135 @@
+/*
+ @licstart  The following is the entire license notice for the JavaScript code in this file.
+
+ The MIT License (MIT)
+
+ Copyright (C) 1997-2020 by Dimitri van Heesch
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies or
+ substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @licend  The above is the entire license notice for the JavaScript code in this file
+*/
+var NAVTREE =
+[
+  [ "Hardware Abstraction Layer (HAL)", "index.html", [
+    [ "Hardware Abstraction Layer", "index.html", [
+      [ "Overview", "index.html#autotoc_md1", null ],
+      [ "API Structure", "index.html#autotoc_md2", null ],
+      [ "Resource Identification", "index.html#autotoc_md3", null ],
+      [ "Hardware Manager", "index.html#autotoc_md4", null ],
+      [ "Power Management", "index.html#autotoc_md5", null ],
+      [ "Compile Time Dependencies", "index.html#autotoc_md6", null ],
+      [ "Event Handling", "index.html#autotoc_md7", null ],
+      [ "Error reporting", "index.html#autotoc_md8", null ],
+      [ "RTOS Integration", "index.html#autotoc_md9", null ],
+      [ "More information", "index.html#autotoc_md10", null ]
+    ] ],
+    [ "HAL API Reference", "modules.html", "modules" ]
+  ] ]
+];
+
+var NAVTREEINDEX =
+[
+"group__group__hal.html",
+"group__group__hal__general__types.html#ga48a2f3a7a4210f50859fc68fa3db9391",
+"group__group__hal__impl__clock.html#gaf41ad9bcad5895c4e7db1adc681eb367",
+"group__group__hal__impl__pin__package__cyw20829__40__qfn.html#ga63c1a69194462794ed2efe4214d9b163",
+"group__group__hal__impl__pin__package__cyw20829__56__qfn.html#ga02bf919af595cef48bee3cd806aa34d2",
+"group__group__hal__impl__pin__package__cyw20829__56__qfn.html#ggab24d2d0f36afa1c85516af9e53405e70a2269bac40e13cb61f09fdb588507da82",
+"group__group__hal__impl__pin__package__psoc6__01__104__m__csp__ble.html#ad4514be01ab83c7248c320b3232145c1",
+"group__group__hal__impl__pin__package__psoc6__01__104__m__csp__ble.html#gga707195ce0627016bf371643bdd9caa51a95e8336ec074bbd5096a3c9e2195a514",
+"group__group__hal__impl__pin__package__psoc6__01__104__m__csp__ble__usb.html#ggadb1b30ad8667ff98ff7c39046c4d0741a23d505c049c81443b12e53d5b00b1be9",
+"group__group__hal__impl__pin__package__psoc6__01__116__bga__ble.html#ggaf78d7d92acc4005cc057d8a9b48e6f28a03d2dd144727710aa3078b5b2736a9b6",
+"group__group__hal__impl__pin__package__psoc6__01__116__bga__usb.html#gaf5988f7edd3a8d5a4e3f07b1c0b41aa5",
+"group__group__hal__impl__pin__package__psoc6__01__124__bga.html#gae412e083c2cc451e231e97921df65207",
+"group__group__hal__impl__pin__package__psoc6__01__124__bga__sip.html#gac1e001dd6cea9e59b9df2545f871bf9d",
+"group__group__hal__impl__pin__package__psoc6__01__43__smt.html#ga9e6da60bc49525861d4c3c14ba3e361e",
+"group__group__hal__impl__pin__package__psoc6__01__68__qfn__ble.html#gad29c4248430c8f6e8d78ad8f644b1e5c",
+"group__group__hal__impl__pin__package__psoc6__01__80__wlcsp.html#gaef70d3ebd8450ff618c548904776969c",
+"group__group__hal__impl__pin__package__psoc6__02__100__wlcsp.html#ggadf6ab010c97463ef4fd3785fe3f631f4a3e5cbec8950dbbdf6b28c2edf8b5de30",
+"group__group__hal__impl__pin__package__psoc6__02__124__bga.html#gga1adc7d502d3949ca46d6c25c77256d06a583cbcc11d71b44face70c1fadefc9c0",
+"group__group__hal__impl__pin__package__psoc6__02__128__tqfp.html#gga66fabf71654d0cc785bbac07469be354a48fead26a455d15e627a59f49e735ed6",
+"group__group__hal__impl__pin__package__psoc6__02__68__qfn.html#gga211a36c071f2ae834389f4667b181c35a6e81efad69a0ea034651af008bd857b9",
+"group__group__hal__impl__pin__package__psoc6__03__49__wlcsp.html#ga56e9733b8f60354c2fdc05f0aa1743e1",
+"group__group__hal__impl__pin__package__psoc6__03__68__qfn.html#ggac5ef75242c79cd654461fe238990b566a314f040c789cfa222f71ac693d4634b3",
+"group__group__hal__impl__pin__package__psoc6__04__68__qfn.html#ga4e45148eb46a4c35615383490cb73fe6",
+"group__group__hal__impl__pin__package__psoc6__04__80__m__csp.html#gaf66548e32f27564cce52c9aaefd07518",
+"group__group__hal__impl__pin__package__tviibe1m__100__lqfp.html#ga02bf919af595cef48bee3cd806aa34d2",
+"group__group__hal__impl__pin__package__tviibe1m__144__lqfp.html#gae412e083c2cc451e231e97921df65207",
+"group__group__hal__impl__pin__package__tviibe1m__176__lqfp.html#ggaec597f1de50464ca9dfb29dc2e3fe85ca2f03e90ec98878f7c0550e1271d88c72",
+"group__group__hal__impl__pin__package__tviibe1m__64__lqfp.html#gga341dd83dc02d2dce67fcb8694a5b4fd7a8799b19bae738f4351ba84d4aaf85d62",
+"group__group__hal__impl__pin__package__tviibe4m__100__lqfp.html#gac8e3a1c1ca5ed736ce59dbf11547e6ce",
+"group__group__hal__impl__pin__package__tviibe4m__144__lqfp.html#gga488dcac56c38547ef2440731fdbe259da68646e89c96e2bf59b3e1584f4d29a80",
+"group__group__hal__impl__pin__package__tviibe4m__176__lqfp.html#ggaa294c4cea43ace98eff14bf6006fce72a85edf49dfa99d41fe6209082476c16be",
+"group__group__hal__impl__pin__package__tviibe4m__80__lqfp.html#ga5d22009767265c954374d18697834d23",
+"group__group__hal__impl__pin__package__xmc7100__100__teqfp.html#gaa47fc9c5dfcc08d09aa895a71a86c19e",
+"group__group__hal__impl__pin__package__xmc7100__144__teqfp.html#gac09c2dcbf5725d75f3bd52a5fd15f5de",
+"group__group__hal__impl__pin__package__xmc7100__176__teqfp.html#ga8ac645a03a58b04107a745d3a711de8d",
+"group__group__hal__impl__pin__package__xmc7100__272__bga.html#ga0ee320e890007954af879ca097ba9dca",
+"group__group__hal__impl__pin__package__xmc7100__272__bga.html#gga664c6b8656a769f149092bd0f1073cf0a6e81efad69a0ea034651af008bd857b9",
+"group__group__hal__impl__pin__package__xmc7200__176__teqfp.html#gaad5e15237798fe8d3275f878426933b7",
+"group__group__hal__impl__pin__package__xmc7200__272__bga.html#ga3cd43fc956862ad59f73e28719951c5b",
+"group__group__hal__impl__pin__package__xmc7200__272__bga.html#ggafc113ff58ca3359906d9d30d749d25a1a848b44378a656b21ab50480faf883583",
+"group__group__hal__impl__pin__package__xmc7200__320__bga.html#gac8e3a1c1ca5ed736ce59dbf11547e6ce",
+"group__group__hal__impl__pin__package__xmc7200__320__bga.html#ggad38839a2406ac562d708d7639fbff225ae5b0ca83b2050162a6a3c5e7f5cd7d72",
+"group__group__hal__impl__triggers__cyw20829a0.html#gga120c6e84a7ca4fc2db9424e335b313eea6c8b2e9edfd68b8ab481db1d496c9e32",
+"group__group__hal__impl__triggers__cyw20829a0.html#gga9cba01e91c1016ae2eaa0eaa14f602bea1ebf3893f889005bbd25672f1fe4182e",
+"group__group__hal__impl__triggers__psoc6__01.html#ga3c821b2d4d967baeef8cd7a92c077b02",
+"group__group__hal__impl__triggers__psoc6__01.html#gga96236d1368f920d28af90262e8b57046a67738cf381c4de721aea0b2569fe7444",
+"group__group__hal__impl__triggers__psoc6__01.html#gga96236d1368f920d28af90262e8b57046afb68fb6c08b6431172897288f1c54280",
+"group__group__hal__impl__triggers__psoc6__01.html#ggaa2df0778261ace69282e18e3ec39553ca80cdaa91fdbf21c79eedab0cc62d3ac7",
+"group__group__hal__impl__triggers__psoc6__02.html#ga53ef0e29f38e491a0ed8b489337e26ce",
+"group__group__hal__impl__triggers__psoc6__02.html#ggad083c3efb0851cf38b9d9c633128da7da7c15aaa5a5afada19bb29334648c53ed",
+"group__group__hal__impl__triggers__psoc6__03.html#gga38d590d240fad195b692fa316382858da5428d6c1a804145811efee448f494f5a",
+"group__group__hal__impl__triggers__psoc6__03.html#ggaa15786a3c3e8b90aab093207b2a440fcaf009e30ad0daa55eb40035c5b602b069",
+"group__group__hal__impl__triggers__psoc6__04.html#ggaf248bbdcfc82d83541f1f59116553f77a6dd7e7b90713a011d4f3c8801df19504",
+"group__group__hal__impl__triggers__tviibe1m.html#ga6835a23524d753c7b625c62b2074a8b8",
+"group__group__hal__impl__triggers__tviibe1m.html#gga51efa2b7967ddf8013f52d47646fcc59a3f3961c8245d139823624f56af0b7d81",
+"group__group__hal__impl__triggers__tviibe1m.html#gga51efa2b7967ddf8013f52d47646fcc59afb0173b0187e4186e780d2771f58e2c3",
+"group__group__hal__impl__triggers__tviibe1m.html#gga96aecc53069fe0e90ba2f5a483f8cdd4a4fbaf76b51d95c6d9fc83b039b973bde",
+"group__group__hal__impl__triggers__tviibe1m.html#gga96aecc53069fe0e90ba2f5a483f8cdd4aa51741dd58398399ea2c32b3709089f7",
+"group__group__hal__impl__triggers__tviibe1m.html#gga96aecc53069fe0e90ba2f5a483f8cdd4aee5252e4d429d823aadc3036865854ba",
+"group__group__hal__impl__triggers__tviibe4m.html#ga98bd87db1b217428a463aa4d5087acef",
+"group__group__hal__impl__triggers__tviibe4m.html#gga37274e7e38c2e8288828cd9484825eaba27db57c64e796b1b0e3ca297499b49dc",
+"group__group__hal__impl__triggers__tviibe4m.html#gga37274e7e38c2e8288828cd9484825eaba7a901f2aca8311d53b52612b7a3dd074",
+"group__group__hal__impl__triggers__tviibe4m.html#gga37274e7e38c2e8288828cd9484825eabaca853a251a7adc3ed94d1f5f347c81f3",
+"group__group__hal__impl__triggers__tviibe4m.html#gga708e3ad965bca118452228e9e0ef5209a1b4b8a7ad1ff0cba1dcdb47e86599924",
+"group__group__hal__impl__triggers__tviibe4m.html#gga708e3ad965bca118452228e9e0ef5209acf2f744752e29685fa5f6f757c32e137",
+"group__group__hal__impl__triggers__xmc7100.html#ga8cfb6955c4396573691cea2a4046e22e",
+"group__group__hal__impl__triggers__xmc7100.html#ggaae463f0d72717c88e957c6f2aa3fc6bea1c1e640754a6ebbdc0660da35339d949",
+"group__group__hal__impl__triggers__xmc7100.html#ggaae463f0d72717c88e957c6f2aa3fc6bea66beaf8a8abd289ceba93928bc9eb049",
+"group__group__hal__impl__triggers__xmc7100.html#ggaae463f0d72717c88e957c6f2aa3fc6beab06abc8093a5a8fdce4718442830cede",
+"group__group__hal__impl__triggers__xmc7100.html#ggaae463f0d72717c88e957c6f2aa3fc6beaef71ecaf2cc8f3105f0d0f24a421a386",
+"group__group__hal__impl__triggers__xmc7100.html#ggabc7240cd99199537b83cc07f5771319aa6e02ae68d8c7b03c4a420cecb6239e65",
+"group__group__hal__impl__triggers__xmc7200.html#ga110392f430462cb84ed87dea10cb9180",
+"group__group__hal__impl__triggers__xmc7200.html#gaa189c27bb042e8abd1b2f5235a9a7c9e",
+"group__group__hal__impl__triggers__xmc7200.html#gga65936b2f101dab49c9dafbdddc41469aa31a49ea6f80c761c0c58cebca07166e2",
+"group__group__hal__impl__triggers__xmc7200.html#gga65936b2f101dab49c9dafbdddc41469aaa19cb2c9d80bc2a6eef87e45ea6a606e",
+"group__group__hal__impl__triggers__xmc7200.html#ggabe6c3f354cc1ccd4f5fd3fbe50639b0fa0b0363c6e0ed8256b577693bb20629ab",
+"group__group__hal__impl__triggers__xmc7200.html#ggabe6c3f354cc1ccd4f5fd3fbe50639b0fa42f27bd17b71e9b60500dc7b86023d5a",
+"group__group__hal__impl__triggers__xmc7200.html#ggabe6c3f354cc1ccd4f5fd3fbe50639b0fa745153c15b6c8ef6ec1c9cfcdf422f55",
+"group__group__hal__impl__triggers__xmc7200.html#ggabe6c3f354cc1ccd4f5fd3fbe50639b0faaa98f5ea75b88ced408928e95748b8b0",
+"group__group__hal__impl__triggers__xmc7200.html#ggabe6c3f354cc1ccd4f5fd3fbe50639b0fadd70ec48940cdb339ae280e4ace410f0",
+"group__group__hal__lptimer.html#ga8a2db5e37e9e36afd382844cf909278f",
+"group__group__hal__results.html#gga84f32ecb6376e2088d4f048e35f52005af001a4e0cb1173e8797a0a77c820bf0c",
+"group__group__hal__results__rtc.html#ga6c6143b437306d30ee23482cce83d461",
+"group__group__hal__sdhc.html#gab58a2ffca59383a72cf8bc49d74cf17b",
+"group__group__hal__syspm.html#gga560aa7873d3131c4eb5d1453711305d2aeaae71eba11b9c861e4a86a6f5c0f2aa",
+"group__group__hal__uart.html#gac26f415eecf9b66b490bac95bddab362"
+];
+
+var SYNCONMSG = 'click to disable panel synchronisation';
+var SYNCOFFMSG = 'click to enable panel synchronisation';
