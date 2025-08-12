@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+gdb.client.commands=set mem inaccessible-by-default off\r\nset remotetimeout 15
+gdb.client.doStart=true
+gdb.client.executable=${cy_tools_path\:CY_TOOL_arm-none-eabi-gdb_EXE}
+gdb.client.other=
+gdb.openocd.doDebugInRam=false
+gdb.openocd.doInitialReset=false
+gdb.openocd.doPreRunReset=false
+gdb.openocd.enableSemihosting=true
+gdb.openocd.init.other=
+gdb.openocd.initialReset.type=init
+gdb.openocd.preRun.other=
+gdb.openocd.preRunReset.type=
+gdb.server.doStart=true
+gdb.server.executable=${openocd_path}/${openocd_executable}
+gdb.server.other=-s "${openocd_path}/../scripts"\r\n-s "bsps/TARGET_APP_CY8CKIT-062-BLE/config/GeneratedSource"\r\n-c "source [find interface/kitprog3.cfg]"\r\n-c "cmsis_dap_vid_pid 0x04B4 0xF151 0x04B4 0xF152"\r\n-c "transport select swd"\r\n-c "puts stderr {Started by GNU MCU Eclipse}"\r\n-c "source [find target/psoc6.cfg]"\r\n-c "psoc6.cpu.cm4 configure -rtos auto -rtos-wipe-on-reset-halt 1"\r\n-c "gdb_port 3332"\r\n-c "psoc6 sflash_restrictions 1"\r\n-c "init; reset init"

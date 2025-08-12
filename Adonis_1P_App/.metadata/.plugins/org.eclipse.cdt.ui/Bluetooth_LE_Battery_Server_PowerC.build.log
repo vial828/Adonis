@@ -1,0 +1,11 @@
+15:15:42 **** Build of configuration Debug for project Bluetooth_LE_Battery_Server_PowerC ****
+"C:\\Users\\S1136062\\ModusToolbox\\tools_3.2\\modus-shell\\bin\\make" CY_MAKE_IDE=eclipse CY_IDE_TOOLS_DIR=C:/Users/S1136062/ModusToolbox/tools_3.2 CY_IDE_BT_TOOLS_DIR= -j4 --output-sync all 
+include flashmap.mk
+Tools Directory: C:/Users/S1136062/ModusToolbox/tools_3.2
+Searching installed tools in progress...
+Searching installed tools complete
+C:/Users/S1136062/ModusToolbox/tools_3.2/make/core_version3/startex-v3.mk:159: *** Libraries: "recipe-make" not found. Run "make getlibs" to ensure all required build and code dependencies are present..  Stop.
+"C:/Users/S1136062/ModusToolbox/tools_3.2/modus-shell/bin/make CY_MAKE_IDE=eclipse CY_IDE_TOOLS_DIR=C:/Users/S1136062/ModusToolbox/tools_3.2 CY_IDE_BT_TOOLS_DIR= -j4 --output-sync all" terminated with exit code 2. Build might be incomplete.
+
+15:15:44 Build Failed. 1 errors, 0 warnings. (took 1s.891ms)
+

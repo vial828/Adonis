@@ -1,0 +1,14 @@
+14:32:16 **** Clean-only build of configuration Debug for project adonis1p ****
+"C:\\Infineon\\Tools\\ModusToolbox\\tools_3.2\\modus-shell\\bin\\make" CY_MAKE_IDE=eclipse CY_IDE_TOOLS_DIR=C:/Infineon/Tools/ModusToolbox/tools_3.2 CY_IDE_BT_TOOLS_DIR= -j6 --output-sync clean 
+include flashmap.mk
+Tools Directory: C:/Infineon/Tools/ModusToolbox/tools_3.2
+Searching installed tools in progress...
+Searching installed tools complete
+
+
+"flashmap.py ../mtb_shared/core-make/release-v3.3.0/make/scripts/python.bash ../mtb_shared/ota-update/release-v2.0.0/scripts/flashmap.py -p PSOC_062_1M -i ../mtb_shared/ota-update/release-v2.0.0/configs/flashmap/psoc62_overwrite_single20000.json > flashmap.mk"
+include flashmap.mk
+rm -rf D:/Adonis_Bat/device_1P/adonis1p/build/APP_CY8CKIT-062-BLE/Debug D:/Adonis_Bat/device_1P/adonis1p/build/APP_CY8CKIT-062-BLE/generated
+
+14:32:23 Build Finished. 0 errors, 0 warnings. (took 6s.772ms)
+

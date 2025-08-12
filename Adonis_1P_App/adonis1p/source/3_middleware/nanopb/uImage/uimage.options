@@ -1,0 +1,5 @@
+#option
+
+Frame.unicodeCharacters max_count:10
+
+Device.frames max_count:3

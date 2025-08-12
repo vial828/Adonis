@@ -1,0 +1,90 @@
+/**
+  ******************************************************************************
+  * @file    driver_detector.h
+  * @author  xuhua.huang@metextech.com
+  * @date    2024/03/013
+  * @version V0.01
+  * @brief   Brief description.
+  *
+  *   Detailed description starts here.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2024 SMOORE TECHNOLOGY CO.,LTD.
+  * All rights reserved.</center></h2>
+  *
+  ******************************************************************************
+  * Change Logs:
+  * Date            Version    Author                       Notes
+  * 2024-03-013     V0.01      xuhua.huang@metextech.com    the first version
+  *
+  ******************************************************************************
+  */
+
+#ifndef __DRIVER_DETECTOR_H
+#define __DRIVER_DETECTOR_H
+
+#include "stdint.h"
+#include "cy_pdl.h"
+#include "cyhal.h"
+#include "cybsp.h"
+#pragma pack(1)
+
+/* ADC Channel constants*/
+typedef enum ADC_CHANNELS
+{
+    ADC_USB = 0,
+    ADC_VCDC,
+    ADC_IS1,
+    ADC_IS2,
+    ADC_NUM,
+} AdcCh_e;
+
+typedef struct 
+{
+    cyhal_gpio_t pin;
+    cyhal_adc_channel_t *pChObj; 
+    const cyhal_adc_channel_config_t* pConfig;
+}Adc_config_t;
+/**
+  * @brief 探测器信息结构体
+  */
+typedef struct DetectorInfo_t
+{
+    float battTypeVoltage;  // 电池厂家判断 ADC 电压
+	float heat_K_temp;		// 热电偶温度
+	float heat_K_cood_temp;	// 热电偶冷端温度
+	float usb_port_temp;    // USB端口温度
+	float heat_V;			// 发热体电压
+	float heat_R;			// 发热丝电阻
+    float heat_I;			// 发热丝电流
+    float heat_P;			// 发热丝功率
+    uint16_t opa_adc_val;	//
+} DetectorInfo_t;
+
+//定义TR数据结构
+typedef struct tr_info
+{
+	uint32_t  Tempeture;			//TR表温度值
+	uint32_t  Resistor;			//TR表电阻值
+} TR_INFO;
+
+
+float hal_get_k_cood_temp(uint32_t ntc_mV);
+float hal_usb_port_temp(uint32_t ntc_mV);
+float hal_get_heat_k_temp(uint32_t opa_volt,uint32_t ntc_mV);
+#pragma pack()
+
+extern void adc_channel_initialize(AdcCh_e Chx);
+extern void adc_initialize(void);
+extern int32_t adc_read(AdcCh_e Chx);
+extern uint8_t flag_adc_done;
+extern uint16_t gs_adc_val_tbl[16];
+int driver_detector_init(void);
+int driver_detector_deinit(void);
+int driver_detector_read(uint8_t *pBuf, uint16_t len);
+int driver_detector_write(uint8_t *pBuf, uint16_t len);
+
+#endif
+

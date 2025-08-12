@@ -1,0 +1,1372 @@
+#include "protocol_usb.h"
+#include "data_base_info.h"
+#include "platform_io.h"
+extern uint8_t g_tImageSecondRam[IMAGE_SEZE];
+
+static ProtocolUartUsb_t gs_usbInfo=
+{
+    .unlockCode = COM_UNLOCK_CODE,//锁定码，解锁过程中使用
+    .lockFlag = LOCK,//锁定与解锁的状态
+    .lockStep = STEP1,//解锁步骤
+};
+
+
+static IapInfo_t gs_iapInfo = 
+{
+    .startFlag = false,
+    .packet_total = 0,
+    .frameIndex = 0,
+    .offsetAddr = 0,
+};
+
+static const uint32_t app_uart_img_magic[] = {
+    0xf395c277,
+    0x7fefd260,
+    0x0f505235,
+    0x8079b62c,
+};
+    /* size of the boot_image_magic in mcuboot slot */
+#define APP_UART_MAGIC_SZ   (sizeof app_uart_img_magic)
+
+static  uint32_t app_uart_magic_off(void)
+{
+//    return (MCU_FLASH_SECOND_SLOT_SIZE - BOOT_UART_MAGIC_SZ);
+    return (FLASH_AREA_IMG_1_SECONDARY_SIZE - APP_UART_MAGIC_SZ);
+}
+
+
+unsigned int flash_program_sector(unsigned char* dat, unsigned int addr)
+{
+    ptIoDev mcuFlashDev = io_dev_get_dev(DEV_MCU_FLASH);
+    McuFlashDataType_t  t_temp;
+    t_temp.addr = addr;
+    t_temp.pData = dat;
+    t_temp.size = MCU_FLASH_ROW_SIZE;
+    mcuFlashDev->write( (uint8_t*)&t_temp, t_temp.size);
+    vTaskDelay(50);
+    return 1;
+}
+
+unsigned int flash_read_sector(unsigned char* dat, unsigned int addr)
+{
+    ptIoDev mcuFlashDev = io_dev_get_dev(DEV_MCU_FLASH);
+    McuFlashDataType_t  t_temp;
+    t_temp.addr = addr;
+    t_temp.pData = dat;
+    t_temp.size = MCU_FLASH_ROW_SIZE;
+    mcuFlashDev->read( (uint8_t*)&t_temp, t_temp.size);
+    vTaskDelay(50);
+    return 1;
+}
+
+int app_uart_write_magic(void)
+{
+    uint8_t magic[APP_UART_MAGIC_SZ];
+    uint32_t off;
+    uint32_t addr;
+    uint8_t *pIapBuf = get_iap_combine_buf();
+
+    memcpy(magic, app_uart_img_magic, APP_UART_MAGIC_SZ);
+
+    off = app_uart_magic_off();
+    
+    addr = MCU_FLASH_SECOND_SLOT_ADDR + FLASH_AREA_IMG_1_SECONDARY_SIZE - MCU_FLASH_ROW_SIZE;
+    flash_read_sector(pIapBuf, addr);
+    memcpy(&pIapBuf[MCU_FLASH_ROW_SIZE - APP_UART_MAGIC_SZ ], magic, APP_UART_MAGIC_SZ);
+    flash_program_sector(pIapBuf, addr);
+    return 0;
+}
+
+unsigned int extern_flash_program_page(unsigned char* dat, unsigned int addr)
+{
+    ptIoDev mcuFlashDev = io_dev_get_dev(DEV_MCU_FLASH);
+    McuFlashDataType_t  t_temp;
+    t_temp.addr = addr;
+    t_temp.pData = dat;
+    t_temp.size = EXTERN_FLASH_PAGE_SIZE;
+    mcuFlashDev->write( (uint8_t*)&t_temp, t_temp.size);
+//    vTaskDelay(10);
+    return 1;
+}
+
+
+/*---------------------------------------------------------------------------*/
+//设置SN      
+
+static uint16_t cmd_set_devSN(ProtocolBase_t *pBuf)
+{
+    ptIoDev e2pDev = io_dev_get_dev(DEV_MCU_EEPROM);//
+    E2PDataType_t e2pTemp;
+	uint16_t tbd = 0;
+	char* devID = (char*)pBuf->pData;
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+
+    if(tempLen > E2P_SIZE_OF_SN)//如果长度超过存储的长度，则返回错误 
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+
+
+
+    e2pTemp.addr = E2P_ADDR_OF_SN;
+    e2pTemp.pDate = devID;
+    e2pTemp.size = tempLen;
+    e2pDev->write((uint8_t*)&e2pTemp,sizeof(e2pTemp));
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+
+	return cmd_base_reply(pBuf,PROC_RESPONE_ACK);
+    
+
+}
+
+
+/*---------------------------------------------------------------------------*/
+//获得 ID 值        数据域：0 Byte
+
+//#define DEVICE_ID				"Adonis 1P"	//设备ID
+static uint16_t cmd_get_devSN(ProtocolBase_t *pBuf)
+{
+    ptIoDev e2pDev = io_dev_get_dev(DEV_MCU_EEPROM);//
+    E2PDataType_t e2pTemp;
+
+	char* devID = (char*)pBuf->pData;
+
+    e2pTemp.addr = E2P_ADDR_OF_SN;
+    e2pTemp.pDate = devID;
+    e2pTemp.size = E2P_SIZE_OF_SN;//E2P_SIZE_OF_SN
+    e2pDev->read((uint8_t*)&e2pTemp,sizeof(e2pTemp));
+
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+
+    pBuf->dataLen.low = LBYTE(E2P_SIZE_OF_SN);
+    pBuf->dataLen.high = HBYTE(E2P_SIZE_OF_SN);    
+	memcpy(pBuf->pData,(uint8_t*)devID,sizeof(devID));
+
+	return cmd_base_reply(pBuf,PROC_RESPONE_DATA);
+    
+
+}
+
+
+/*---------------------------------------------------------------------------*/
+//获取版本信息		数据域：10 Byte
+/*
+1P PCBA测试软件版本信息：
+APP 版本：    AD1P_APP_POC1_2024.05.14.1.f
+Bootload 版本：AD1P_BL_RDPO_POC1_2024.05.14.1
+UI版本：          UI_2024.04.24.1
+INI版本：      NA
+硬件版本：     V2.2
+电芯ID:       （AUCOPO / COSMX / UNKNOWN）
+MCU类型：    0
+电量计版本：   NA 
+
+电芯ID定义：
+小于0.84V -- AUCOPO
+大于1.96V – COSMX
+其他—UNKNOWN
+
+MCU类型定义：
+Infineon---0，  GD—1
+*/
+
+typedef uint16_t (*pVersionFun) (uint8* pBuf);
+
+
+//返回长度
+__WEAK uint16_t procotol_app_version(uint8* pBuf)
+{
+    char ver[] = "AD1P_APP_POC1_2024.06.07.1.f\n";
+    memcpy(pBuf,(uint8*)ver,strlen(ver));
+    return strlen(ver);
+}
+
+__WEAK uint16_t procotol_boot_version(uint8* pBuf)
+{
+    char ver[] = "AD1P_BL_RDPO_POC1_2024.05.22.1\n";
+    memcpy(pBuf,(uint8*)ver,strlen(ver));
+    return strlen(ver);
+}
+
+__WEAK uint16_t procotol_ui_version(uint8* pBuf)
+{
+    char ver[] = "UI_2024.06.03.1\n";
+    memcpy(pBuf,(uint8*)ver,strlen(ver));
+    return strlen(ver);
+}
+
+__WEAK uint16_t procotol_ini_version(uint8* pBuf)
+{
+    char ver[] = "NA\n";
+    memcpy(pBuf,(uint8*)ver,strlen(ver));
+    return strlen(ver);
+}
+
+__WEAK uint16_t procotol_harware_version(uint8* pBuf)
+{
+    char ver[] = "V2.2\n";
+    memcpy(pBuf,(uint8*)ver,strlen(ver));
+    return strlen(ver);
+}
+/*
+电芯ID定义：
+小于0.84V -- AUCOPO
+大于1.96V – COSMX
+其他—UNKNOWN
+
+*/
+
+
+
+
+__WEAK uint16_t procotol_cellID_version(uint8* pBuf)
+{
+    const char var1[] = "AUCOPO\n";
+    const char var2[] = "COSMX\n";
+    const char var3[] = "UNKNOWN\n";
+    char*pvar = var3;
+
+    DetectorInfo_t heat_t;
+    ptIoDev adcDev = io_dev_get_dev(DEV_ADC);
+
+    adcDev->read((uint8_t*)&heat_t,sizeof(heat_t));
+
+    if((heat_t.battTypeVoltage)<0.840f)//
+    {
+        pvar = var1;
+    }
+    else if((heat_t.battTypeVoltage) > 1.960f)
+    {
+        pvar = var2;
+    }else{
+        pvar = var3;
+    }
+
+    memcpy(pBuf,(uint8*)pvar,strlen(pvar));
+    return strlen(pvar);
+}
+
+__WEAK uint16_t procotol_mcu_version(uint8* pBuf)
+{
+    char ver[] = "\n";
+    pBuf[0] = 0x00;
+    memcpy(&pBuf[1],(uint8*)ver,strlen(ver));
+    return (strlen(ver)+1);
+}
+
+__WEAK uint16_t procotol_fuel_gauge_version(uint8* pBuf)
+{
+    char ver[] = "NA\n";
+    memcpy(pBuf,(uint8*)ver,strlen(ver));
+    return strlen(ver);
+}
+
+
+
+static const pVersionFun verFunItem[] = 
+{
+    procotol_app_version,
+    procotol_boot_version,
+    procotol_ui_version,
+    procotol_ini_version,
+    procotol_harware_version ,
+    procotol_cellID_version,
+    procotol_mcu_version,
+    procotol_fuel_gauge_version,
+
+};
+
+
+static uint16_t cmd_get_version(ProtocolBase_t *pBuf)
+{
+    
+	uint16_t rLen = 0;
+	uint16_t size = 0;
+    uint8* p = pBuf->pData;
+
+	for(uint16_t i = 0; i < eleof(verFunItem); i++)
+	{
+		if(verFunItem[i]!= NULL)
+		{
+			size = verFunItem[i](p);
+            rLen+=size;
+            p+=size;
+		}
+	}
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+
+	return cmd_base_reply(pBuf,PROC_RESPONE_DATA);
+}
+
+/*---------------------------------------------------------------------------*/
+//启动加热		数据域：1 Byte
+
+__WEAK bool procotol_heat_start(uint8_t heatType){return false;}
+
+static uint16_t cmd_heat_start(ProtocolBase_t *pBuf)
+{
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    
+    if(procotol_heat_start(pBuf->pData[0])==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+/*---------------------------------------------------------------------------*/
+//停止加热		数据域：0 Byte
+
+__WEAK bool procotol_heat_stop(void){return false;}
+
+static uint16_t cmd_heat_stop(ProtocolBase_t *pBuf)
+{
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    
+    if(procotol_heat_stop()==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+
+/*---------------------------------------------------------------------------*/
+
+
+//解锁
+static uint16_t cmd_unlock(ProtocolBase_t *pBuf){
+	uint32_t UnLockCode;
+	uint16_t rLen = 0;
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    
+	UnLockCode = pBuf->pData[3];
+	UnLockCode <<= 8;
+	UnLockCode += pBuf->pData[2];
+	UnLockCode <<= 8;
+	UnLockCode += pBuf->pData[1];
+	UnLockCode <<= 8;
+	UnLockCode += pBuf->pData[0];
+
+	UnLockCode = ComGetCodeUnLockValue(UnLockCode);
+	
+	if( gs_usbInfo.lockStep == STEP1 )
+    {
+		gs_usbInfo.unlockCode= ComGetCodeUnLockValue(UnLockCode);
+		pBuf->cmd = PROC_RESPONE_DATA;
+		rLen = 4;
+        pBuf->dataLen.low = LBYTE(rLen);
+        pBuf->dataLen.high = HBYTE(rLen);
+    
+		pBuf->pData[0] = UnLockCode & 0x000000ff;
+		pBuf->pData[1] = (UnLockCode >> 8) & 0x000000ff;
+		pBuf->pData[2] = (UnLockCode >> 16) & 0x000000ff;
+		pBuf->pData[3] = (UnLockCode >> 24) & 0x000000ff;
+		gs_usbInfo.lockStep = STEP2;
+	}else{
+        pBuf->dataLen.low = 0;
+        pBuf->dataLen.high = 0;
+		if(gs_usbInfo.unlockCode == UnLockCode){
+			gs_usbInfo.lockFlag = UNLOCK;
+		}else{
+			gs_usbInfo.lockFlag = LOCK;
+		}
+		gs_usbInfo.lockStep = STEP1;
+        pBuf->cmd = PROC_RESPONE_ACK;
+	}
+
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+//锁定
+static uint16_t cmd_lock(ProtocolBase_t *pBuf)
+{
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->cmd = PROC_RESPONE_ACK;
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+	gs_usbInfo.lockFlag = LOCK;	
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+/*---------------------------------------------------------------------------*/
+/*
+Byte[0]更新区域:
+    0x01 BASE
+    0x02 BOOST
+*/
+
+
+//获取温度曲线信息
+static uint16_t cmd_get_tempCurve(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+	uint16_t rLen = 0;
+
+    if(pBuf->pData[0]>BOOST_MODE)
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    
+
+    if(pBuf->pData[0] == BASE_MODE)
+    {
+        rLen = (uint16_t)(sizeof(HeatTemp_t) * 15u);//PC要求只返回数据，不返回类型
+        memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tHeatBaseTemp[0].time), rLen);
+    }else{
+        rLen = (uint16_t)(sizeof(HeatTemp_t) * 15u);
+        memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tHeatBoostTemp[0].time), rLen);
+    }
+
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_DATA;
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+
+//设置温度曲线信息 
+static uint16_t cmd_set_tempCurve(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+    ptIoDev paramDev = io_dev_get_dev(DEV_PARAM);
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low) - 1;
+	
+
+    if( pBuf->pData[0]>BOOST_MODE || tempLen > sizeof(p_tHeatParamInfo->tHeatBaseTemp))//这里还要加个长度的判断，防止溢出
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    
+    if(pBuf->pData[0] == BASE_MODE)//PC要求只返回数据，不返回类型
+    {
+        memcpy((uint8_t *)&(p_tHeatParamInfo->tHeatBaseTemp[0].time), &pBuf->pData[1], tempLen);
+    }else{
+        memcpy((uint8_t *)&(p_tHeatParamInfo->tHeatBoostTemp[0].time), &pBuf->pData[1], tempLen);
+    }
+
+    paramDev->write( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+    paramDev->read( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_ACK;
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+/*---------------------------------------------------------------------------*/
+
+//获取功率曲线 		数据域：0 Byte
+static uint16_t cmd_get_powerTBL(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+	uint16_t rLen = 0;
+    if(pBuf->pData[0]>BOOST_MODE )
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    
+    if(pBuf->pData[0] == BASE_MODE)
+    {
+        rLen = (uint16_t)(sizeof(HeatPower_t) * MAX_POWER_CTRL_POINT);//PC要求只返回数据，不返回类型
+        memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tHeatBasePower[0].time), rLen);
+    }else{
+        rLen = (uint16_t)(sizeof(HeatPower_t) * MAX_POWER_CTRL_POINT);
+        memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tHeatBoostPower[0].time), rLen);
+    }
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_DATA;
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+
+//设置功率曲线 		数据域：0 Byte
+static uint16_t cmd_set_powerTBL(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+    ptIoDev paramDev = io_dev_get_dev(DEV_PARAM);
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low) - 1;
+	
+
+    if( pBuf->pData[0]>BOOST_MODE || tempLen > sizeof(p_tHeatParamInfo->tHeatBasePower) )//这里还要加个长度的判断，防止溢出
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    
+    if(pBuf->pData[0] == BASE_MODE)//PC要求只返回数据，不返回类型
+    {
+        memcpy((uint8_t *)&(p_tHeatParamInfo->tHeatBasePower[0].time), &pBuf->pData[1], tempLen);
+    }else{
+        memcpy((uint8_t *)&(p_tHeatParamInfo->tHeatBoostPower[0].time),&pBuf->pData[1], tempLen);
+    }
+    
+    paramDev->write( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+    paramDev->read( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_ACK;
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+/*---------------------------------------------------------------------------*/
+
+//获取温度参数配置	数据域：0Byte
+
+static uint16_t cmd_get_adjust(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+	uint16_t rLen = 0;
+    rLen = 6;
+    memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tempAdjb), 2);
+    memcpy(&pBuf->pData[2],(uint8_t *)&(p_tHeatParamInfo->tempAdjk),4);
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_DATA;
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+
+//设置温度参数配置	数据域：2Byte + 4Byte
+
+static uint16_t cmd_set_adjust(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+    ptIoDev paramDev = io_dev_get_dev(DEV_PARAM);
+	uint16_t tempLen = 0;
+
+	tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+
+    memcpy((uint8_t *)&(p_tHeatParamInfo->tempAdjb), pBuf->pData, 2);
+    memcpy((uint8_t *)&(p_tHeatParamInfo->tempAdjk), &pBuf->pData[2], 4);
+    paramDev->write( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+    paramDev->read( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_ACK;
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+/*---------------------------------------------------------------------------*/
+
+//获取抽吸参数		数据域：0Byte or 2Byte
+
+static uint16_t cmd_get_puff(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+	uint16_t rLen = 0;
+    rLen = (uint16_t)sizeof(PuffInfo_t);
+    memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tPuffInfo.maxPuff), rLen);
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_DATA;
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+
+//设置抽吸参数       数据域：(组数+2)*2Byte
+
+static uint16_t cmd_set_puff(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+    ptIoDev paramDev = io_dev_get_dev(DEV_PARAM);
+	uint16_t tempLen = 0;
+
+	tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+    memcpy((uint8_t *)&(p_tHeatParamInfo->tPuffInfo.maxPuff), pBuf->pData, tempLen);
+    paramDev->write( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+    paramDev->read( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_ACK;
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+/*---------------------------------------------------------------------------*/
+
+//获取 TR 信息
+static uint16_t cmd_get_TR(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+	uint16_t rLen = 0;
+    rLen = (uint16_t)(sizeof(TrInfo_t) * MAX_TR_TBL_GR);
+    memcpy(pBuf->pData,(uint8_t *)&(p_tHeatParamInfo->tTrInfo[0].tempeture), rLen);
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_DATA;
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+
+
+//设置 TR 信息
+static uint16_t cmd_set_TR(ProtocolBase_t *pBuf)
+{
+    HeatParamInfo_t* p_tHeatParamInfo = get_heat_param_info_handle();
+    ptIoDev paramDev = io_dev_get_dev(DEV_PARAM);
+	uint16_t tempLen = 0;
+
+	tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+    memcpy((uint8_t *)&(p_tHeatParamInfo->tTrInfo[0].tempeture), pBuf->pData, tempLen);
+    paramDev->write( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+    paramDev->read( (uint8_t*)&(p_tHeatParamInfo->validCheck), sizeof(HeatParamInfo_t));
+
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_ACK;
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+
+/*---------------------------------------------------------------------------*/
+//数据更新控制        数据域：0~N Byte
+/*
+Byte[0]: 
+        0x01 APP区域
+        0x02 Boot区域
+        0x03 UI素材区域
+        0x04 ini区域
+
+Byte[1]:
+        0x01  启动更新
+        0x02  设置地址
+        0x03  读取校验
+        0x11  更新结果
+        0x12  传输结束
+        0xE0  终止升级
+        
+Byte[2~N]参数:
+        Byte[1]=0x01：Byte[2~5]总包数
+                      Byte[6~N]文件信息
+        Byte[1]=0x02：Byte[2~5]=起始地址
+        Byte[1]=0x11：Byte[2] = 0x00失败，
+        Byte[2] = 0x01成功
+*/
+
+// app 更新处理程序
+bool updata_ctr_app(ProtocolBase_t *pBuf)
+{
+    gs_iapInfo.frameIndex = 0;
+    gs_iapInfo.packet_total = COMB_4BYTE(pBuf->pData[5],pBuf->pData[4],pBuf->pData[3],pBuf->pData[2]);
+    gs_iapInfo.startFlag = true;
+    gs_iapInfo.offsetAddr = 0;
+
+    return true;
+}
+
+// app 更新升级标志
+bool updata_app_flag(ProtocolBase_t *pBuf)
+{
+
+    if(pBuf->pData[2] == 0x01)
+    {
+        app_uart_write_magic();
+        //---------------------------末完待续
+//        taskENTER_CRITICAL(); 
+        /*写升级标志到FALSH*/
+        
+//        taskEXIT_CRITICAL();
+        //---------------------------末完待续
+
+        //复位系统
+        NVIC_SystemReset();
+    }
+
+    return true;//这一回复帧回不去了
+}
+
+// ui 更新升级标志
+bool updata_ui_flag(ProtocolBase_t *pBuf)
+{
+
+    if(pBuf->pData[2] == 0x01)
+    {
+//        app_uart_write_magic();
+        //---------------------------末完待续
+//        taskENTER_CRITICAL(); 
+        /*写升级标志到FALSH*/
+        
+//        taskEXIT_CRITICAL();
+        //---------------------------末完待续
+
+        //复位系统
+//        NVIC_SystemReset();
+    }
+
+    return true;//这一回复帧回不去了
+}
+
+// ini 更新升级标志
+bool updata_ini_flag(ProtocolBase_t *pBuf)
+{
+
+    if(pBuf->pData[2] == 0x01)
+    {
+//        app_uart_write_magic();
+        //---------------------------末完待续
+//        taskENTER_CRITICAL(); 
+        /*写升级标志到FALSH*/
+        
+//        taskEXIT_CRITICAL();
+        //---------------------------末完待续
+
+        //复位系统
+//        NVIC_SystemReset();
+    }
+
+    return true;//这一回复帧回不去了
+}
+
+
+// app 更新处理程序
+bool updata_ctr_boot(ProtocolBase_t *pBuf)
+{
+    gs_iapInfo.frameIndex = 0;
+    gs_iapInfo.packet_total = COMB_4BYTE(pBuf->pData[5],pBuf->pData[4],pBuf->pData[3],pBuf->pData[2]);
+    gs_iapInfo.startFlag = true;
+    gs_iapInfo.offsetAddr = 0;
+
+
+    return true;
+}
+
+// ui 素材 更新处理程序
+bool updata_ctr_ui(ProtocolBase_t *pBuf)
+{
+    gs_iapInfo.frameIndex = 0;
+    gs_iapInfo.packet_total = COMB_4BYTE(pBuf->pData[5],pBuf->pData[4],pBuf->pData[3],pBuf->pData[2]);
+    gs_iapInfo.startFlag = true;
+    gs_iapInfo.offsetAddr = 0;
+
+    return true;
+}
+
+// ini 读处理程序
+bool updata_ctr_read_ini(void)
+{
+    ptIoDev e2pDev = io_dev_get_dev(DEV_MCU_EEPROM);//
+    E2PDataType_t e2pTemp;
+    uint32_t addrOffset = 1024 * 10; // 10K byte偏移
+    // 读取KEY
+    memset(g_tImageSecondRam, 0, IMAGE_SEZE); // 副显存可以共用
+    e2pTemp.addr = E2P_ADDR_OF_INI_KEY_STR;
+    e2pTemp.pDate = &g_tImageSecondRam[addrOffset]; //
+    e2pTemp.size = E2P_SIZE_OF_INI_KEY_STR;
+    e2pDev->read((uint8_t*)&e2pTemp,sizeof(e2pTemp));
+    uint16_t *pVal = get_ini_val_info_handle();
+    int j = 0;
+    uint32_t addr = 0;
+    // 拷贝版本字符串
+    memcpy(&g_tImageSecondRam[addr], &g_tImageSecondRam[j + addrOffset], (strlen(&g_tImageSecondRam[j + addrOffset]) + 1));
+    addr = addr + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+    j = j + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+    // 拷贝长度字符串
+    memcpy(&g_tImageSecondRam[addr], &g_tImageSecondRam[j + addrOffset], (strlen(&g_tImageSecondRam[j + addrOffset]) + 1));
+    addr = addr + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+    j = j + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+    for (int i = 0; i < INI_VAL_TBL_LEN; i++) { // 组合成键值对
+        memcpy(&g_tImageSecondRam[addr], &g_tImageSecondRam[j + addrOffset], (strlen(&g_tImageSecondRam[j + addrOffset]) + 1)); // key
+        addr = addr + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+        j = j + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+        memcpy(&g_tImageSecondRam[addr], (uint8_t *)&pVal[i], 2);
+        addr += 2;
+    }
+    uint32_t length = addr;
+    if (length % 256 == 0) {
+        gs_iapInfo.packet_total = length / 256;
+    } else {
+        gs_iapInfo.packet_total = (length / 256) + 1;
+    }
+    gs_iapInfo.frameIndex = 0;
+    gs_iapInfo.startFlag = true;
+    gs_iapInfo.offsetAddr = 0;
+    return true;
+}
+
+
+// ini 写 处理程序
+bool updata_ctr_write_ini(ProtocolBase_t *pBuf)
+{
+    gs_iapInfo.frameIndex = 0;
+    gs_iapInfo.packet_total = COMB_4BYTE(pBuf->pData[5],pBuf->pData[4],pBuf->pData[3],pBuf->pData[2]);
+    gs_iapInfo.startFlag = true;
+    gs_iapInfo.offsetAddr = 0;
+    return true;
+}
+
+// boot 更新升级标志,boot 直接更新了
+bool updata_boot_flag(ProtocolBase_t *pBuf)
+{
+    uint32_t rowNum;
+    uint8_t *pIapBuf = get_iap_combine_buf();
+    uint32_t addr;
+    if(pBuf->pData[2] == 0x01 && gs_iapInfo.frameIndex ==gs_iapInfo.packet_total && gs_iapInfo.frameIndex != 0)
+    {
+    
+        // 升级boot不能断电，否则可能变砖
+        // 把备份区boot拷贝到mcuboot区
+        if ((gs_iapInfo.packet_total % 2) != 0) {
+            rowNum = (gs_iapInfo.packet_total + 1) / 2;
+        } else {
+            rowNum = gs_iapInfo.packet_total / 2;
+        }
+        for(uint32_t i = 0; i < rowNum; i++) {
+            addr = MCU_FLASH_SECOND_SLOT_ADDR + (i * MCU_FLASH_ROW_SIZE);
+            flash_read_sector(pIapBuf, addr);
+            vTaskDelay(50);
+            addr = MCU_FLASH_START_ADDR + (i * MCU_FLASH_ROW_SIZE);
+            flash_program_sector(pIapBuf, addr);
+            vTaskDelay(50);
+        }
+        //复位系统
+        NVIC_SystemReset();
+    }
+
+    return true;//这一回复帧回不去了
+}
+
+
+
+
+
+//更新控制命令入口 
+static uint16_t cmd_updata_control(ProtocolBase_t *pBuf)
+{
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+	uint16_t updataType = COMB_2BYTE(pBuf->pData[0],pBuf->pData[1]);//将BYTE[0]与BYTE[1]合并成为一个类型来使用
+    bool retFlag;
+    
+    if(pBuf->pData[0]>UPDATA_AREA_READ_INI || pBuf->pData[1] > UPDATA_CTR_STOP)
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+
+    switch(updataType)
+    {
+        case UPDATA_BYTE01_APP_START:
+        {
+            retFlag = updata_ctr_app(pBuf);
+            break;
+        }
+        case UPDATA_BYTE01_BOOT_START:
+        {
+            retFlag = updata_ctr_boot(pBuf);
+            break;
+        }
+        case UPDATA_BYTE01_UI_START:
+        {
+            retFlag = updata_ctr_ui(pBuf);
+            break;
+        }
+        case UPDATA_BYTE01_APP_FLAG:
+        {
+            retFlag = updata_app_flag(pBuf);
+            break;
+        }
+        case UPDATA_BYTE01_BOOT_FLAG:
+        {
+            retFlag = updata_boot_flag(pBuf);
+            break;
+        }
+        case UPDATA_BYTE01_UI_FLAG:
+        {
+            retFlag = updata_ui_flag(pBuf);
+            break;
+        }
+
+        case UPDATA_BYTE01_INI_WRITE_START:
+        {
+            retFlag = updata_ui_flag(pBuf);
+            break;
+        }
+
+        case UPDATA_BYTE01_INI_READ_START:
+        {
+            retFlag = updata_ctr_read_ini();
+           // 读取配置区key-val 总长度计算总包数
+            uint32 packNum = 0;
+            memcpy(pBuf->pData,(uint8_t *)&gs_iapInfo.packet_total, 4);
+            pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+            pBuf->cmd = PROC_RESPONE_DATA;
+            pBuf->dataLen.low = 0x04;
+            pBuf->dataLen.high = 0;
+            return cmd_base_reply(pBuf,pBuf->cmd);
+        }
+        default:
+            break;
+
+    }
+    
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    if(retFlag==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+
+//app 数据帧升级
+static uint16_t cmd_tranfer_app_data(ProtocolBase_t *pBuf)
+{
+    bool retFlag = true;
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+    uint32_t tempIndex = COMB_4BYTE(pBuf->pData[3],pBuf->pData[2],pBuf->pData[1],pBuf->pData[0]);
+    ptIoDev usbDev = io_dev_get_dev(DEV_USB);
+    if((gs_iapInfo.startFlag==false)||(tempIndex !=gs_iapInfo.frameIndex))
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    gs_iapInfo.frameIndex++;
+
+    uint8_t *pIapBuf = get_iap_combine_buf();
+    
+    memcpy(&pIapBuf[gs_iapInfo.offsetAddr % IAP_COMBINE_BUF_LEN], &pBuf->pData[4], tempLen - 4); // tempLen包含了tempIndex，因此需减4
+    
+    gs_iapInfo.offsetAddr += tempLen - 4; // tempLen包含了tempIndex，因此需减4
+
+    // 需增加地址溢出判断， 防止错误覆盖其他地址
+    if (gs_iapInfo.offsetAddr > MCU_FLASH_SECOND_SLOT_SIZE) {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    if(gs_iapInfo.offsetAddr % MCU_FLASH_ROW_SIZE == 0)
+    {
+//        taskENTER_CRITICAL(); 
+        /*写升级数据到备份FALSH*/
+        //program 512byte bin here
+        flash_program_sector(pIapBuf, MCU_FLASH_SECOND_SLOT_ADDR + (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE - 1) * MCU_FLASH_ROW_SIZE);
+       // sm_log(SM_LOG_INFO, "addr %d, index %d, total %d!!!\r\n", (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE - 1), gs_iapInfo.frameIndex, gs_iapInfo.packet_total);
+//        taskEXIT_CRITICAL();
+    }
+    
+    if(gs_iapInfo.frameIndex ==gs_iapInfo.packet_total) // 如果已经传完最后一包
+    {
+        if (gs_iapInfo.offsetAddr % MCU_FLASH_ROW_SIZE != 0) { // 如果最后一包凑不成整行，处理最后一行存储
+//            taskENTER_CRITICAL(); 
+            /*写升级数据到备份FALSH*/
+            //program <512byte bin here
+            flash_program_sector(pIapBuf, MCU_FLASH_SECOND_SLOT_ADDR + (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE) * MCU_FLASH_ROW_SIZE); // 注意这里不能再减一，因为不是整除
+         //   sm_log(SM_LOG_INFO, "last_addr %d, index %d, total %d!!!\r\n", (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE), gs_iapInfo.frameIndex, gs_iapInfo.packet_total);
+//            taskEXIT_CRITICAL();
+        }
+        gs_iapInfo.frameIndex = 0;
+        gs_iapInfo.packet_total = 0;
+        gs_iapInfo.startFlag = false;
+        gs_iapInfo.offsetAddr = 0;
+        
+    }
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    if(retFlag==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+
+
+
+
+
+//boot 数据帧升级
+static uint16_t cmd_tranfer_boot_data(ProtocolBase_t *pBuf)
+{
+    bool retFlag = true;
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+    uint16_t tempIndex = COMB_4BYTE(pBuf->pData[3],pBuf->pData[2],pBuf->pData[1],pBuf->pData[0]);
+
+    if((gs_iapInfo.startFlag==false)||(tempIndex !=gs_iapInfo.frameIndex))
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    gs_iapInfo.frameIndex++;
+
+        uint8_t *pIapBuf = get_iap_combine_buf();
+        
+        memcpy(&pIapBuf[gs_iapInfo.offsetAddr % IAP_COMBINE_BUF_LEN], &pBuf->pData[4], tempLen - 4); // tempLen包含了tempIndex，因此需减4
+        
+        gs_iapInfo.offsetAddr += tempLen - 4; // tempLen包含了tempIndex，因此需减4
+    
+        // 需增加地址溢出判断， 防止错误覆盖其他地址
+        if (gs_iapInfo.offsetAddr > MCU_FLASH_BOOT_LOADER_SLOT_SIZE) { // 大于mcu-boot空间，出错
+            return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+        }
+        if(gs_iapInfo.offsetAddr % MCU_FLASH_ROW_SIZE == 0)
+        {
+    //        taskENTER_CRITICAL(); 
+            /*写升级数据到备份FALSH*/
+            //program 512byte bin here
+            flash_program_sector(pIapBuf, MCU_FLASH_SECOND_SLOT_ADDR + (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE - 1) * MCU_FLASH_ROW_SIZE);
+           // sm_log(SM_LOG_INFO, "addr %d, index %d, total %d!!!\r\n", (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE - 1), gs_iapInfo.frameIndex, gs_iapInfo.packet_total);
+    //        taskEXIT_CRITICAL();
+        }
+        
+        if(gs_iapInfo.frameIndex ==gs_iapInfo.packet_total) // 如果已经传完最后一包
+        {
+            if (gs_iapInfo.offsetAddr % MCU_FLASH_ROW_SIZE != 0) { // 如果最后一包凑不成整行，处理最后一行存储
+    //            taskENTER_CRITICAL(); 
+                /*写升级数据到备份FALSH*/
+                //program <512byte bin here
+                flash_program_sector(pIapBuf, MCU_FLASH_SECOND_SLOT_ADDR + (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE) * MCU_FLASH_ROW_SIZE); // 注意这里不能再减一，因为不是整除
+             //   sm_log(SM_LOG_INFO, "last_addr %d, index %d, total %d!!!\r\n", (gs_iapInfo.offsetAddr / MCU_FLASH_ROW_SIZE), gs_iapInfo.frameIndex, gs_iapInfo.packet_total);
+    //            taskEXIT_CRITICAL();
+            }
+//            gs_iapInfo.frameIndex = 0;
+//            gs_iapInfo.packet_total = 0;
+//            gs_iapInfo.startFlag = false;
+//            gs_iapInfo.offsetAddr = 0;
+            
+        }
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    if(retFlag==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+
+
+//ui 数据帧升级
+static uint16_t cmd_tranfer_ui_data(ProtocolBase_t *pBuf)
+{
+    bool retFlag = true;
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+    uint16_t tempIndex = COMB_4BYTE(pBuf->pData[3],pBuf->pData[2],pBuf->pData[1],pBuf->pData[0]);
+
+    if((gs_iapInfo.startFlag==false)||(tempIndex !=gs_iapInfo.frameIndex))
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    gs_iapInfo.frameIndex++;
+
+    // 需增加地址溢出判断， 防止错误覆盖其他地址
+    if ((gs_iapInfo.offsetAddr + tempLen - 4) > EXTREN_FLASH_TOTAL_SIZE) {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+
+    uint8_t *pIapBuf = get_iap_combine_buf();
+
+    memcpy(&pIapBuf[0], &pBuf->pData[4], tempLen - 4); // tempLen包含了tempIndex，因此需减4
+
+    extern_flash_program_page(pIapBuf, gs_iapInfo.offsetAddr);
+
+    gs_iapInfo.offsetAddr += tempLen - 4; // tempLen包含了tempIndex，因此需减4
+
+    if(gs_iapInfo.frameIndex ==gs_iapInfo.packet_total) // 如果已经传完最后一包
+    {
+        gs_iapInfo.frameIndex = 0;
+        gs_iapInfo.packet_total = 0;
+        gs_iapInfo.startFlag = false;
+        gs_iapInfo.offsetAddr = 0;
+    }
+
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    if(retFlag==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+static uint16_t cmd_tranfer_read_ini_data(ProtocolBase_t *pBuf)
+{
+    uint32_t tempIndex = COMB_4BYTE(pBuf->pData[3],pBuf->pData[2],pBuf->pData[1],pBuf->pData[0]);
+	uint16_t rLen = 0;
+    IniInfo_t *iniInfo = get_iniInfo_handle();
+    uint32_t totalLen = iniInfo->keyTotalLen + iniInfo->valTotalLen;
+    if(tempIndex >= gs_iapInfo.packet_total)
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    uint32_t addr = tempIndex * 256;
+    if (totalLen - addr >= 256) {
+        rLen = 256;
+    } else {
+        rLen = totalLen - addr;
+    }
+    memcpy(pBuf->pData[4], &g_tImageSecondRam[addr], rLen);
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pBuf->cmd = PROC_RESPONE_DATA;
+    pBuf->dataLen.low = LBYTE(rLen);
+    pBuf->dataLen.high = HBYTE(rLen);
+	return cmd_base_reply(pBuf,pBuf->cmd);
+}
+
+static uint16_t cmd_tranfer_write_ini_data(ProtocolBase_t *pBuf)
+{
+    bool retFlag = true;
+	uint16_t tempLen = COMB_2BYTE(pBuf->dataLen.high,pBuf->dataLen.low);
+    uint16_t tempIndex = COMB_4BYTE(pBuf->pData[3],pBuf->pData[2],pBuf->pData[1],pBuf->pData[0]);
+    uint32_t addrOffset = 1024 * 10;
+    uint16_t *pVal = get_ini_val_info_handle();
+    int j = 0;
+    uint32_t addr = 0;
+    ptIoDev e2pDev = io_dev_get_dev(DEV_MCU_EEPROM);//
+    E2PDataType_t e2pTemp;
+    if((gs_iapInfo.startFlag==false)||(tempIndex !=gs_iapInfo.frameIndex))
+    {
+        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+    }
+    gs_iapInfo.frameIndex++;
+
+    // 需增加地址溢出判断， 防止错误覆盖其他地址
+//    if ((gs_iapInfo.offsetAddr + tempLen - 4) > EXTREN_FLASH_TOTAL_SIZE) {
+//        return cmd_base_reply(pBuf,PROC_RESPONE_NCK);
+//    }
+
+//    uint8_t *pIapBuf = get_iap_combine_buf();
+
+    memcpy(&g_tImageSecondRam[addrOffset  + gs_iapInfo.offsetAddr], &pBuf->pData[4], tempLen - 4); // tempLen包含了tempIndex，因此需减4
+
+    gs_iapInfo.offsetAddr += tempLen - 4; // tempLen包含了tempIndex，因此需减4
+
+    if(gs_iapInfo.frameIndex == gs_iapInfo.packet_total) // 如果已经传完最后一包, 保存eerom
+    {
+        j = 0;
+        addr = 0;
+        // 拆分ini存储
+        // 拷贝版本字符串
+        memcpy(&g_tImageSecondRam[addr], &g_tImageSecondRam[j + addrOffset], (strlen(&g_tImageSecondRam[j + addrOffset]) + 1));
+        addr = addr + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+        j = j + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+        // 拷贝长度字符串
+        memcpy(&g_tImageSecondRam[addr], &g_tImageSecondRam[j + addrOffset], (strlen(&g_tImageSecondRam[j + addrOffset]) + 1));
+        addr = addr + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+        j = j + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+
+        for (int i = 0; i < INI_VAL_TBL_LEN; i++) {
+            memcpy(&g_tImageSecondRam[addr], &g_tImageSecondRam[j + addrOffset], (strlen(&g_tImageSecondRam[j + addrOffset]) + 1)); // key
+            addr = addr + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+            j = j + (strlen(&g_tImageSecondRam[j + addrOffset]) + 1);
+            memcpy((uint8_t *)&pVal[i],  &g_tImageSecondRam[j + addrOffset], 2);
+            j += 2;
+        }
+        
+        e2pTemp.addr = E2P_ADDR_OF_INI_KEY_STR;
+        e2pTemp.pDate = g_tImageSecondRam; //
+        e2pTemp.size = E2P_SIZE_OF_INI_KEY_STR;
+        e2pDev->write((uint8_t*)&e2pTemp,sizeof(e2pTemp));
+
+        e2pTemp.addr = E2P_ADDR_OF_INI_VAL_TBL;
+        e2pTemp.pDate = (uint8_t *)pVal; //
+        e2pTemp.size = E2P_SIZE_OF_INI_VAL_TBL;
+        e2pDev->write((uint8_t*)&e2pTemp,sizeof(e2pTemp));
+        gs_iapInfo.frameIndex = 0;
+        gs_iapInfo.packet_total = 0;
+        gs_iapInfo.startFlag = false;
+        gs_iapInfo.offsetAddr = 0;
+    }
+
+	pBuf->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+    pBuf->dataLen.low = 0;
+    pBuf->dataLen.high = 0;
+    if(retFlag==true)
+    {
+        pBuf->cmd = PROC_RESPONE_ACK;
+    }else{
+        pBuf->cmd = PROC_RESPONE_NCK;
+    }
+	return cmd_base_reply(pBuf,pBuf->cmd);
+
+}
+
+/*---------------------------------------------------------------------------*/
+
+
+static const CmdProtocol_t cmdListUsb[]=
+{
+	{PROC_CMD_SetSN,				cmd_set_devSN},             //获得 ID 值		数据域：0 Byte
+	{PROC_CMD_GetSN,				cmd_get_devSN},             //获得 ID 值		数据域：0 Byte
+	{PROC_CMD_GetVer,				cmd_get_version},           //获取版本信息		数据域：10 Byte
+	{PROC_CMD_StartHeat,			cmd_heat_start},            //启动加热		数据域：1 Byte
+	{PROC_CMD_StopHeat,				cmd_heat_stop},             //停止加热		数据域：0 Byte
+	{PROC_CMD_FactoryTest,			cmd_factory_test},          //测试命令		数据域：N Byte
+	
+	{PROC_CMD_UnLock,			    cmd_unlock},                //解锁 			数据域：4 Byte
+	{PROC_CMD_Lock,			        cmd_lock},                  //锁定			数据域：0 Byte
+	{PROC_CMD_GetTempCurve,			cmd_get_tempCurve},         //获取温度曲线信息	数据域：0 Byte
+	{PROC_CMD_SetTempCurve,			cmd_set_tempCurve},         //设置温度曲线信息	数据域：(组数*4) Byte
+	{PROC_CMD_GetPowerCurve,		cmd_get_powerTBL},          //获取功率曲线 		数据域：0 Byte
+	{PROC_CMD_SetPowerCurve,		cmd_set_powerTBL},          //设置功率曲线 		数据域：0 Byte
+	{PROC_CMD_GetAdj,			    cmd_get_adjust},            //获取温度参数配置	数据域：0Byte
+	{PROC_CMD_SetAdj,			    cmd_set_adjust},            //设置温度参数配置	数据域：2Byte
+	{PROC_CMD_GetPuff,			    cmd_get_puff},              //获取抽吸参数		数据域：0Byte or 2Byte
+	{PROC_CMD_SetPuff,			    cmd_set_puff},              //设置抽吸参数		数据域：(组数+2)*2Byte
+	{PROC_CMD_GetTR,			    cmd_get_TR},                //获取 TR 信息		数据域：0 Byte
+	{PROC_CMD_SetTR,			    cmd_set_TR},                //设置 TR 信息		数据域：(组数*4) Byte
+
+	{PROC_CMD_Sleep,			    NULL},          //进入休眠 		数据域：0 Byte
+	{PROC_CMD_LogControl,			NULL},          //Log输出控制		数据域：1 Byte
+	
+	{PROC_CMD_UpdateControl,		cmd_updata_control},          //数据更新控制		数据域：0~N Byte
+	{PROC_CMD_AppData,			    cmd_tranfer_app_data},          //传输App数据			数据域：N Byte
+	{PROC_CMD_BootData,			    cmd_tranfer_boot_data},          //传输Boot数据			数据域：N Byte
+	{PROC_CMD_UI_Data,			    cmd_tranfer_ui_data},          //传输ui数据			数据域：N Byte
+	
+	{PROC_CMD_UI_Data,			    NULL},          //传输UI数据		 	数据域：N Byte
+	{PROC_CMD_WRITE_INI,			cmd_tranfer_write_ini_data},          //写ini数据			数据域：N Byte
+	{PROC_CMD_READ_INI,			    cmd_tranfer_read_ini_data},          //读ini数据			数据域：N Byte
+
+
+};
+
+
+
+
+//procotol parse 
+int frame_parse_usb(uint8_t *pBuf,uint16_t rxLen)
+{
+
+	ProtocolBase_t *pFrame = (ProtocolBase_t*)pBuf;
+	uint16_t tempLen = 0;
+	uint16_t tempSum = 0;
+
+	if(rxLen < PROC_AT_LIST_LEN)
+	{
+		return RET_FAILURE;
+	}
+
+	/*check ahead*/
+	if(pFrame->ahead != PROC_AHEAD)
+	{
+		return RET_FAILURE;
+	}
+
+	/*check device ID*/
+	if(pFrame->deviceID != DEV_TX_TO_RX(DEV_PC,DEV_1P))
+	{
+		return RET_FAILURE;
+	}
+
+	/*check length*/
+	tempLen = COMB_2BYTE(pFrame->dataLen.high,pFrame->dataLen.low);
+	if(rxLen < (tempLen+PROC_AT_LIST_LEN))
+	{
+		return RET_FAILURE;
+	}
+
+
+	/*check checksum*/
+	tempSum = ((uint16_t)(pFrame->pData[tempLen+1]<<8)|(uint16_t)pFrame->pData[tempLen]);
+	if(calc_checksum((uint8_t*)pBuf,(tempLen+PROC_AT_LIST_LEN-2))!=tempSum)
+	{
+		return RET_FAILURE;
+	}
+	
+	for(uint16_t i = 0; i < eleof(cmdListUsb); i++)
+	{
+		if(pFrame->cmd == cmdListUsb[i].dataCmd && cmdListUsb[i].func != NULL)
+		{
+			return (int)cmdListUsb[i].func(pFrame);
+		}
+	}
+
+	return RET_FAILURE;
+}
+
+
+
+
+//procotol create 
+uint16_t frame_create_usb(uint8_t *pTxBuf,uint8_t txCmd,uint8_t *pDataBuf,uint16_t txLen)
+{
+	ProtocolBase_t *pFrame = (ProtocolBase_t*)pTxBuf;
+	uint16_t checkSum = 0;
+
+	pFrame->ahead = PROC_AHEAD;
+	pFrame->deviceID = DEV_TX_TO_RX(DEV_1P,DEV_PC);
+	pFrame->cmd = 	txCmd;
+	pFrame->dataLen.low = LBYTE(txLen);
+	pFrame->dataLen.high = HBYTE(txLen);
+	memcpy(pFrame->pData,pDataBuf,txLen);
+	checkSum = calc_checksum((uint8_t*)pTxBuf,(txLen+PROC_AT_LIST_LEN-2));
+	pFrame->pData[txLen] = LBYTE(checkSum);
+	pFrame->pData[txLen+1] = HBYTE(checkSum);
+
+	return (txLen+PROC_AT_LIST_LEN);
+}
+
+
+
+
+
+
+
+
+

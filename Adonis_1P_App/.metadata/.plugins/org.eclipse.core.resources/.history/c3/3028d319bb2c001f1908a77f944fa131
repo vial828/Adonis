@@ -1,0 +1,183 @@
+/**
+  ******************************************************************************
+  * @file    err_code.c
+  * @author  xuhua.huang@metextech.com
+  * @date    2024/03/013
+  * @version V0.01
+  * @brief   Brief description.
+  *
+  *   Detailed description starts here.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2024 SMOORE TECHNOLOGY CO.,LTD.
+  * All rights reserved.</center></h2>
+  *
+  ******************************************************************************
+  * Change Logs:
+  * Date            Version    Author                       Notes
+  * 2024-03-013     V0.01      xuhua.huang@metextech.com    the first version
+  *
+  ******************************************************************************
+  */
+
+#include "err_code.h"
+#include "task_ui_service.h"
+#include "uthash.h"
+#include "sm_log.h"
+typedef struct {
+	EN_ERROR_CODE even;
+	uint8_t pro;
+	UT_hash_handle hh;
+}t_HashEven;
+t_HashEven *pt_hashEven = NULL;
+
+volatile EN_ERROR_CODE g_esysErrUiStaus = ERR_NONE; // UI当前要显示的错误码
+volatile EN_ERROR_CODE g_esysErrStaus = ERR_NONE; // 系统错误码
+// ErrInfo_t g_tErrInfoTbl[ERR_INFO_TBL_LEN];
+
+#define MAX_EVEN 19
+UiInfo_t gt_uiNewHighProEvenInfo = {0}; // 最新最高优先级事件信息
+
+const UiInfo_t gc_UiStatusTabl[MAX_EVEN] = {
+	{FLT_DE_BAT_DAMAGE, 	                NON_RECOVER, 	UI_ERR_CRITICAL     }, \
+	{FLT_DE_CIC_OUTPUT_VOLTAGE,             NON_RECOVER, 	UI_ERR_CRITICAL     }, \
+	{FLT_DE_CIC_CONFIG_ERROR, 				RESET_RECOVER, 	UI_ERR_CRITICAL     }, \
+	{FLT_DE_BAT_DISCHARGE_CURRENT_OVER, 	RESET_RECOVER, 	UI_ERR_CRITICAL     }, \
+	{FLT_DE_BAT_CHARGE_CURRENT_OVER, 	    RESET_RECOVER, 	UI_ERR_CRITICAL      }, \
+	
+	{FLT_DE_BAT_HOT, 		                WAIT_RECOVER, 	UI_ERR_WAIT      }, \
+	{FLT_DE_BAT_COLD, 		                WAIT_RECOVER, 	UI_NONE      }, \
+	{FLT_DE_BAT_HOT_CHARGING, 				WAIT_RECOVER, 	UI_ERR_WAIT   }, \
+	{FLT_DE_BAT_COLD_CHARGE, 				WAIT_RECOVER, 	UI_NONE      }, \
+	{FLT_DE_BAT_VOLTAGE_OVER, 		        WAIT_RECOVER, 	UI_NONE   }, \
+	{FLT_DE_CO_JUNC_HOT, 		            WAIT_RECOVER, 	UI_ERR_WAIT      }, \
+	{FLT_DE_USB_HOT, 		                WAIT_RECOVER, 	UI_ERR_WAIT   }, \
+	
+	{FLT_DE_TC_ZONE_HOT, 		            WAIT_RECOVER, 	UI_ERR_WAIT      }, \
+	{FLT_DE_TC_ZONE_HOT_PRE_SES, 		    WAIT_RECOVER, 	UI_ERR_WAIT   }, \
+	
+	{TIP_DE_BAT_LEVEL, 		               NONE_ERR, 	    UI_LEVEL            }, \
+	{TIP_DE_HEAT, 		                   NONE_ERR, 	    UI_HEATTING          }, \
+	{TIP_DE_CLEAN, 		                   NONE_ERR, 	    UI_CLEAN_PRO        }, \
+	{TIP_DE_SHIPPING, 		               NONE_ERR, 	    UI_SHIPPING          }, \
+	{TIP_DE_REBOOT, 		               NONE_ERR, 	    UI_BOOT_TIP          }, \
+};
+
+void add_ui_even(EN_ERROR_CODE even)
+{
+	t_HashEven *s;
+	HASH_FIND_INT(pt_hashEven, &even, s);
+	if (s == NULL) {
+		s = (t_HashEven *)malloc(sizeof(t_HashEven));
+		s->even = even;
+		HASH_ADD_INT(pt_hashEven, even, s);
+	}
+}
+
+EN_ERROR_CODE find_ui_even(EN_ERROR_CODE even)
+{
+	t_HashEven *s;
+	HASH_FIND_INT(pt_hashEven, &even, s);
+	if (s != NULL) {
+		return s->even;
+	}
+	return 0;
+}
+
+void delete_ui_even(EN_ERROR_CODE even)
+{
+	t_HashEven *s;
+	HASH_FIND_INT(pt_hashEven, &even, s);
+	if (s != NULL) {
+		HASH_DEL(pt_hashEven, s);
+		free(s);
+	}
+}
+
+// 获取当前最高优先级even
+UiInfo_t* get_ui_high_pro_even(void)
+{
+	uint8_t i;
+	EN_ERROR_CODE even = 0;
+	for (i = 0; i < MAX_EVEN; i++) {
+		even = find_ui_even(gc_UiStatusTabl[i].even);
+		if(even != 0) {
+			break;
+		}
+	}
+    #if 0
+	if (i == (MAX_EVEN) && even == 0 && gt_uiNewHighProEvenInfo.even != 0) { // hash表里已没有事件,且当前最高优先级不为NONE，则置零
+		memset(&gt_uiNewHighProEvenInfo.even, 0, sizeof(UiInfo_t));
+		return &gt_uiNewHighProEvenInfo;
+	}
+	if (even != gt_uiNewHighProEvenInfo.even) {
+		memcpy(&gt_uiNewHighProEvenInfo.even, &gc_UiStatusTabl[i].even, sizeof(UiInfo_t));
+	}
+    #endif
+    memcpy(&gt_uiNewHighProEvenInfo.even, &gc_UiStatusTabl[i].even, sizeof(UiInfo_t));
+	return &gt_uiNewHighProEvenInfo;
+}
+
+UiTaskDetailStatus_u get_pro_even(void)
+{
+	uint8_t i;
+	EN_ERROR_CODE even = 0;
+	for (i = 0; i < MAX_EVEN; i++) {
+		if(g_esysErrStaus == gc_UiStatusTabl[i].even) {
+			break;
+		}
+	}
+	return gc_UiStatusTabl[i].uiStatus;
+}
+
+/**
+  * @brief  获取当前系统的错误码
+  * @param  None
+  * @return 返回错误码
+  * @note   None
+  */
+EN_ERROR_CODE get_system_err_status(void)
+{  
+    return g_esysErrStaus;
+}
+
+EN_ERROR_CODE set_system_ui_err_status(void)
+{  
+     g_esysErrUiStaus = 0;
+}
+
+/**
+  * @brief  设置系统的错误码
+  * @param  esysErrStaus 要设定的系统错误码
+  * @return None
+  * @note   None
+  */
+void set_system_err_war_tip_status(EN_ERROR_CODE esysErrStaus)
+{
+    g_esysErrStaus = esysErrStaus;
+    g_esysErrUiStaus = esysErrStaus;
+    add_ui_even();
+    if (esysErrStaus == find_ui_even(esysErrStaus)) {
+        delete_ui_even(esysErrStaus);
+        sm_log(SM_LOG_INFO, "even: %d\r\n",esysErrStaus);
+    }
+}
+
+/**
+  * @brief  系统错误处理
+  * @param  None：
+  * @return None
+  * @note   None
+  */
+void sys_err_pro(void)
+{
+//    if (ERR_NONE = get_system_err_status()) { // 改成错误表里查询错误码，查询对应数据，根据数据，更新对应错误码状态, 哪些错误不能加热，哪些错误不能充电直到该错误消失
+        
+//    }
+}
+
+// 启动加热或者充电前查询对应错误码表，如果有对应不能加热或不能充电的错误，则不加热或不充电
+// 错信信息看板？发生错误-》计算一次对应错误，一直没有恢复，则不累加错误，恢复正常再次发生对应错误则累加
+// 

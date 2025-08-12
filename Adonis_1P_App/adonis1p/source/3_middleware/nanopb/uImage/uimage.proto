@@ -1,0 +1,22 @@
+// A very uimage protocol definition, consisting of only
+// one message.
+
+syntax = "proto3";
+
+message Frame {
+    string type = 1;
+	repeated uint32 unicodeCharacters=2;
+	uint32 length = 3;
+}
+
+message FrameEntry{
+	string key = 1;
+	Frame value =2;
+}
+
+message Device{
+	string protocolVersion = 1;
+	repeated FrameEntry frames = 2;
+}
+
+

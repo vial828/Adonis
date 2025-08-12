@@ -1,0 +1,9 @@
+# This list of files to ignore includes common, tool- or user-specific files that
+/Adonis_1P_App/adonis1p/fgit
+/Adonis_1P_Boot/fgit
+/Adonis_1P_App/adonis1p/Output
+/Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.core/mtb-example-btstack-freertos-throughput-client-master.1719295383705.pdom
+/Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.core/mtb-example-btstack-freertos-throughput-server-master.1719295207201.pdom
+/Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.core/mtb_shared.1715519142898.pdom
+/Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.ui/global-build.log
+/Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.core/adonis1p.1715518878424.pdom

@@ -1,0 +1,483 @@
+/**
+  ******************************************************************************
+  * @file    data_base_info.h
+  * @author  xuhua.huang@metextech.com
+  * @date    2024/03/013
+  * @version V0.01
+  * @brief   Brief description.
+  *
+  *   Detailed description starts here.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2024 SMOORE TECHNOLOGY CO.,LTD.
+  * All rights reserved.</center></h2>
+  *
+  ******************************************************************************
+  * Change Logs:
+  * Date            Version    Author                       Notes
+  * 2024-03-013     V0.01      xuhua.huang@metextech.com    the first version
+  *
+  ******************************************************************************
+  */
+
+#ifndef __DATA_BASE_INFO_H
+#define __DATA_BASE_INFO_H
+#include "stdint.h"
+
+#define USB_REC_MAX_DATA_SIZE 250
+//最大温控曲线控制点数
+#define MAX_POWER_CTRL_POINT        (12)
+#define MAX_TEMP_CTRL_POINT         (15)
+#define MAX_TR_TBL_GR               (15)
+#define MAX_STEP_PUFF_POINT         (1)
+#define DEFAULT_MAX_PUFF            (12)
+#define DEFAULT_PREHEAT_TIME        (5)
+#define DEFAULT_HEAT_TIME           (300)
+#define DEFAULT_ADJ_TEMP_B            (0)
+#define DEFAULT_ADJ_TEMP_K            (1)
+// image相关定义
+#define PREHEAT_HI_LEN          (26)
+#define PREHEAT_MODE_LEN        (2)
+#define PREHEAT_START_LEN       (36)
+#define PREHEAT_STANDARD_UP_LEN (8)
+#define HEAT_BAR_END_LEN        (10)
+#define HEAT_BAR_PROC_LEN       (11)
+#define HEAT_GLOW_LEN           (30)
+#define HEAT_END_LEN            (34)
+#define HEAT_STANDARD_END_LEN   (4)
+#define HEAT_DISPOSE_LEN        (28)
+#define HEAT_BYE_LEN            (22)
+#if 0
+#define BATT_NUMBER_LEN         (13)
+#define BATT_CAPACITY_LEN       (2)
+
+#define CHRG_LIGHTNING_LEN      (1)
+#endif
+
+#define BATT_NUMBER_LEN         (13)
+#define BATT_CAPACITY_LEN       (2) // 静态绿色电池图标
+#define BATT_GREEN_LEN          (15)
+#define BATT_YELLOW_LEN         (15)
+#define BATT_AMBER_LEN          (15)
+#define BATT_HINT1_LEN          (11)
+#define BATT_HINT2_LEN          (11)
+#define BATT_HINT3_LEN          (11)
+#define BATT_HINT4_LEN          (11)
+#define BATT_HINT5_LEN          (11)
+#define BATT_PLUG_LEN           (13)
+#define BATT_RED_LEN            (15)
+
+#define CHRG_LIGHTNING_ICON_LEN (1) // 静态闪电图标
+#define CHRG_LIGHTNING_LEN      (6)
+#define CHRG_GREEN_LEN          (11)
+#define CHRG_YELLOW_LEN         (8)
+#define CHRG_AMBER_LEN          (0)
+#define CHRG_RED_LEN            (0)
+
+#define BLTH_FAILED_LEN         (9)
+#define BLTH_ICON_LEN           (1)
+#define BLTH_PAIRED_LEN         (17)
+#define BLTH_PAIRING_LEN        (19)
+
+#define ERR_REBOOT_CONFIRM_LEN  (38)
+#define ERR_RESET_CHARGE_LEN    (15)
+#define ERR_WRONG_CHARGE_LEN    (1)
+#define ERR_COLD_HOT_LEN        (2)
+#define ERR_WAIT_LEN            (25)
+#define ERR_WARNING_LEN         (1)
+#define ERR_REBOOT_CLICK_LEN    (14)
+#define ERR_REBOOT_COUNT_LEN    (24)
+#define ERR_BATTERY_EOL_LEN     (2)
+#define ERR_CRITICAL_QR_LEN     (2)
+
+#define OTHER_CERTIFICATION_LEN (4)
+#define OTHER_AGE_VERIFICATION_LEN (4)
+#define OTHER_POSITION_LEN      (6)
+#define OTHER_CLEAN_LEN      	(29)
+
+#define UI_HOR_RES      90
+#define UI_VER_RES      282
+#define UI_COLOR_DEPTH  3   // 888
+#define IMAGE_SEZE  (UI_HOR_RES * UI_VER_RES * UI_COLOR_DEPTH)
+
+#define IAP_COMBINE_BUF_LEN 512 // IAP 升级缓存包，凑满整包后写进FLASH中
+
+/**
+  * @brief Motor息结构体
+  */
+typedef struct MotorInfo_t
+{
+    uint8_t duty;
+    uint16_t hz;
+
+    uint16_t runIndv;
+    uint16_t stopIndv;
+    uint16_t runTimes;
+    uint32_t motorTick;
+} MotorInfo_t;
+/**
+  * @brief Motor息结构体
+  */
+typedef struct BeepInfo_t
+{
+    uint8_t duty;
+    uint16_t hz;
+
+    uint16_t runIndv;
+    uint16_t stopIndv;
+    uint16_t runTimes;
+    uint32_t beepTick;
+} BeepInfo_t;
+
+//定义TR数据结构
+typedef struct TrInfo_t
+{
+    uint16_t tempeture;         //TR表温度值
+    uint16_t resistor;          //TR表电阻值
+} TrInfo_t;
+
+//温控曲线控制点结构体
+typedef struct HeatTemp_t
+{
+    uint16_t time;              //加热段时间
+    uint16_t tempeture;         //加热段温度
+} HeatTemp_t;
+
+//功率表控制点结构体
+typedef struct HeatPower_t
+{
+    uint16_t time;              //之前定义的是一维数组功率表， 后续拓展为时间对应功率，把powerL改为time
+    uint16_t power;             //加热功率表
+} HeatPower_t;
+
+typedef struct StepPuffInfo_t
+{ 
+    uint16_t timePart; // 阶段抽吸时间
+    uint16_t puffPart; // 阶段口数
+} StepPuffInfo_t;
+
+typedef struct PuffInfo_t
+{
+    uint8_t maxPuff;           //最大口数
+    uint8_t preHeatTime;       //预热时间
+    uint16_t maxHeatTime;       //最大加热时间
+    StepPuffInfo_t tStepPuffInfo[MAX_STEP_PUFF_POINT]; // 补充数据
+} PuffInfo_t;
+
+typedef struct HeatParamInfo_t
+{
+    uint16_t  validCheck;               // 数据区有效校验字节，0xaa：有效，其它值：无效
+    TrInfo_t tTrInfo[MAX_TR_TBL_GR];   
+    HeatPower_t tHeatBasePower[MAX_POWER_CTRL_POINT];
+    HeatTemp_t tHeatBaseTemp[MAX_TEMP_CTRL_POINT];
+
+    HeatPower_t tHeatBoostPower[MAX_POWER_CTRL_POINT];
+    HeatTemp_t  tHeatBoostTemp[MAX_TEMP_CTRL_POINT];-
+    PuffInfo_t tPuffInfo;
+    int16_t  tempAdjb;     //温度调节值
+    float    tempAdjk;          //预留调节关系式为Y=kX+b；
+} HeatParamInfo_t;
+
+#pragma pack(1) // 单字节对齐, app需要同样的单字节对齐去定义结构体
+
+typedef struct ImageInfo_t
+{
+    uint32_t addr;      // 片存储地址
+    uint16_t witdh;     // 像素宽度
+    uint16_t height;    // 像素高度
+    uint16_t xpos;      // 图片x定位点
+    uint16_t ypos;      // 图片y定位点
+  //uint16_t len;     // 图片长度
+} ImageInfo_t;
+
+typedef struct ImageHeatTablInfo_t {
+    uint16_t imagePreheatHiTablLen; // 图片张数
+    ImageInfo_t imagePreheatHiTablInfo[PREHEAT_HI_LEN];
+
+    uint16_t imagePreheatModeTablLen;
+    ImageInfo_t imagePreheatModeTablInfo[PREHEAT_MODE_LEN];
+
+    uint16_t imagePreheatStartTablLen;
+    ImageInfo_t imagePreheatStartTablInfo[PREHEAT_START_LEN];
+
+    uint16_t imagePreheatStandardUpTablLen;
+    ImageInfo_t imagePreheatStandardUpTablInfo[PREHEAT_STANDARD_UP_LEN];
+
+    uint16_t imageConsumeBarEndTablLen;
+    ImageInfo_t imageConsumeBarEndTablInfo[HEAT_BAR_END_LEN];
+
+    uint16_t imageConsumeBarProcTablLen;
+    ImageInfo_t imageConsumeBarProcTablInfo[HEAT_BAR_PROC_LEN];
+
+    uint16_t imageConsumeGlowTablLen;
+    ImageInfo_t imageConsumeGlowTablInfo[HEAT_GLOW_LEN];
+
+    uint16_t imageHeatEndTablLen;
+    ImageInfo_t imageHeatEndTablInfo[HEAT_END_LEN];
+
+    uint16_t imageHeatStandardEndTablLen;
+    ImageInfo_t imageHeatStandardEndTablInfo[HEAT_STANDARD_END_LEN];
+
+    uint16_t imagedHeatDisposeTablLen;
+    ImageInfo_t imagedHeatDisposeTablInfo[HEAT_DISPOSE_LEN];
+
+    uint16_t imagedHeatByeTablLen;
+    ImageInfo_t imagedHeatByeTablInfo[HEAT_BYE_LEN];
+} ImageHeatTablInfo_t;
+//#if 0
+typedef struct ImageBattTablInfo_t {
+    uint16_t imageBattNumberTablLen;
+    ImageInfo_t imageBattNumberTablInfo[BATT_NUMBER_LEN];
+
+    uint16_t imageBattCapacityTablLen;
+    ImageInfo_t imageBattCapacityTablInfo[BATT_CAPACITY_LEN];
+} ImageBattTablInfo_t;
+
+typedef struct ImageChrgTablInfo_t {
+    uint16_t imageChrgLightningTablLen;
+    ImageInfo_t imageChrgLightningTablInfo[CHRG_LIGHTNING_LEN];
+} ImageChrgTablInfo_t;
+//#endif
+#if 0
+typedef struct ImageBattTablInfo_t {
+    uint16_t imageBattNumberTablLen;
+    ImageInfo_t imageBattNumberTablInfo[BATT_NUMBER_LEN];
+
+    uint16_t imageBattCapacityTablLen;
+    ImageInfo_t imageBattCapacityTablInfo[BATT_CAPACITY_LEN];
+
+    uint16_t imageBattGreenTablLen;
+    ImageInfo_t imageBattGreenTablInfo[BATT_GREEN_LEN];
+
+    uint16_t imageBattYellowTablLen;
+    ImageInfo_t imageBattYellowTablInfo[BATT_YELLOW_LEN];
+    
+    uint16_t imageBattAmberTablLen;
+    ImageInfo_t imageBattAmberTablInfo[BATT_AMBER_LEN];
+
+    uint16_t imageBattHint1TablLen;
+    ImageInfo_t imageBattHint1TablInfo[BATT_HINT1_LEN];
+
+    uint16_t imageBattHint2TablLen;
+    ImageInfo_t imageBattHint2TablInfo[BATT_HINT2_LEN];
+
+    uint16_t imageBattHint3TablLen;
+    ImageInfo_t imageBattHint3TablInfo[BATT_HINT3_LEN];
+
+    uint16_t imageBattHint4TablLen;
+    ImageInfo_t imageBattHint4TablInfo[BATT_HINT4_LEN];
+
+    uint16_t imageBattHint5TablLen;
+    ImageInfo_t imageBattHint5TablInfo[BATT_HINT5_LEN];
+
+    uint16_t imageBattPlugTablLen;
+    ImageInfo_t imageBattPlugTablInfo[BATT_PLUG_LEN];
+
+    uint16_t imageBattRedTablLen;
+    ImageInfo_t imageBattRedTablInfo[BATT_RED_LEN];
+} ImageBattTablInfo_t;
+
+typedef struct ImageChrgTablInfo_t {
+    uint16_t imageChrgLightningIconTablLen;
+    ImageInfo_t imageChrgLightningIconTablInfo[CHRG_LIGHTNING_ICON_LEN];
+    
+    uint16_t imageChrgLightningTablLen;
+    ImageInfo_t imageChrgLightningTablInfo[CHRG_LIGHTNING_LEN];
+    
+    uint16_t imageChrgGreenTablLen;
+    ImageInfo_t imageChrgGreenTablInfo[CHRG_GREEN_LEN];
+    
+    uint16_t imageChrgYellowTablLen;
+    ImageInfo_t imageChrgYellowTablInfo[CHRG_YELLOW_LEN];
+} ImageChrgTablInfo_t;
+#endif
+
+typedef struct ImageBlthTablInfo_t {
+    uint16_t imageBlthFailedTablLen;
+    ImageInfo_t imageBlthFailedTablInfo[BLTH_FAILED_LEN];
+
+    uint16_t imageBlthIconTablLen;
+    ImageInfo_t imageBlthIconTablInfo[BLTH_ICON_LEN];
+
+    uint16_t imageBlthPairedTablLen;
+    ImageInfo_t imageBlthPairedTablInfo[BLTH_PAIRED_LEN];
+
+    uint16_t imageBlthPairingTablLen;
+    ImageInfo_t imageBlthPairingTablInfo[BLTH_PAIRING_LEN];
+} ImageBlthTablInfo_t;
+
+typedef struct ImageErrTablInfo_t {
+    uint16_t imageErrRebootConfirmTablLen;
+    ImageInfo_t imageErrRebootConfirmTablInfo[ERR_REBOOT_CONFIRM_LEN];
+
+    uint16_t imageErrResetChargeTablLen;
+    ImageInfo_t imageErrResetChargeTablInfo[ERR_RESET_CHARGE_LEN];
+    
+    uint16_t imageErrWrongChargeTablLen;
+    ImageInfo_t imageErrWrongChargeTablInfo[ERR_WRONG_CHARGE_LEN];
+
+    uint16_t imageErrColdHotTablLen;
+    ImageInfo_t imageErrColdHotTablInfo[ERR_COLD_HOT_LEN];
+    
+    uint16_t imageErrWaitTablLen;
+    ImageInfo_t imageErrWaitTablInfo[ERR_WAIT_LEN];
+
+    uint16_t imageErrWarningTablLen;
+    ImageInfo_t imageErrWarningTablInfo[ERR_WARNING_LEN];
+    
+    uint16_t imageErrRebootClickTablLen;
+    ImageInfo_t imageErrRebootClickTablInfo[ERR_REBOOT_CLICK_LEN];
+
+    uint16_t imageErrRebootCountTablLen;
+    ImageInfo_t imageErrRebootCountTablInfo[ERR_REBOOT_COUNT_LEN];
+
+    uint16_t imageErrBatteryEolTablLen;
+    ImageInfo_t imageErrBatteryEolTablInfo[ERR_BATTERY_EOL_LEN];
+
+    uint16_t imageErrCriticalQrTablLen;
+    ImageInfo_t imageErrCriticalQrTablInfo[ERR_CRITICAL_QR_LEN];
+} ImageErrTablInfo_t;
+
+typedef struct ImageOtherTablInfo_t {
+    uint16_t imageOtherCertificationTablLen;
+    ImageInfo_t imageOtherCertificationTablInfo[OTHER_CERTIFICATION_LEN];
+
+    uint16_t imageOtherAgeVerificationTablLen;
+    ImageInfo_t imageOtherAgeVerificationTablInfo[OTHER_AGE_VERIFICATION_LEN];
+
+    uint16_t imageOtherPositionTablLen;
+    ImageInfo_t imageOtherPositionTablInfo[OTHER_POSITION_LEN];
+
+    uint16_t imageOtherCleanTablLen;
+    ImageInfo_t imageOtherCleanTablInfo[OTHER_CLEAN_LEN];
+} ImageOtherTablInfo_t;
+
+
+// 镜像结构体
+typedef struct ImageHeaderInfo_t
+{
+    uint32_t ver;
+
+    ImageHeatTablInfo_t     imageHeatTablInfo;
+    ImageBattTablInfo_t     imageBattTablInfo;
+    ImageChrgTablInfo_t     imageChrgTablInfo;
+    ImageBlthTablInfo_t     imageBlthTablInfo;
+    ImageErrTablInfo_t      imageErrTablInfo;
+    ImageOtherTablInfo_t    imageOtherTablInfo;
+} ImageHeaderInfo_t;
+
+
+typedef struct Qspiflash_t
+{
+    uint32_t addr;
+    uint8_t *data;
+    uint32_t len;
+} Qspiflash_t;
+
+typedef struct AmoledArea_t{
+    int16_t x1;
+    int16_t y1;
+    int16_t x2;
+    int16_t y2;
+} AmoledArea_t;
+
+typedef struct AmoledInfo_t{
+    AmoledArea_t area;
+    uint8_t *data;
+    uint32_t len;
+} AmoledInfo_t;
+
+typedef struct WriteRgbVal_t{ // 这个顺序是显示屏565模式时的高低位顺序，g低位
+    uint16_t g: 6;
+    uint16_t r: 5;
+    uint16_t b: 5;
+} WriteRgbVal_t;
+typedef union WRgbVal_u {
+    WriteRgbVal_t tWriteRgbVal;
+    uint8_t rgbBuf[2];
+} WRgbVal_u;
+
+
+typedef struct ReadRgbVal_t{
+    uint16_t r: 5;
+    uint16_t g: 6;
+    uint16_t b: 5;
+} ReadRgbVal_t;
+typedef union RRgbVal_u {
+    ReadRgbVal_t tReadRgbVal;
+    uint8_t rgbBuf[2];
+} RRgbVal_u;
+
+// fuel gauge chip's battery state
+typedef struct AppBatInfo_t {
+    uint16_t voltage; // battery voltage (mV)
+    int16_t  current; // charge or discharge current (mA)
+    uint16_t temperature; // battery temperature (℃)
+
+    uint16_t capacityFull; // full capacity (mAh)
+    uint16_t capacityRemain; // remaining capacity (mAh)	 
+    uint16_t power; // average power draw (mW)
+
+    uint16_t soc; // state-of-capacity (%)
+    uint16_t soh; // state-of-health (%)	
+    uint32_t cycle; // charge-discharge cycle times
+} AppBatInfo_t;
+
+typedef enum {
+  HEAT_FLOW_STATE_NONE = 0,
+  HEAT_FLOW_STATE_START,
+  HEAT_FLOW_STATE_PREHEAT,
+  HEAT_FLOW_STATE_HEAT_NORMAL,
+  HEAT_FLOW_STATE_HEAT_STAGE_LAST,
+} HEAT_FLOW_STATE_Enum;
+typedef struct heater_struct
+{
+
+    HEAT_FLOW_STATE_Enum HeatState; //
+	unsigned char HeatFlag;         //
+	unsigned char HeatStep;         //
+    unsigned int HeatMode;			//加热模式 BASE BOOST
+	unsigned int HeatTick;          // 加热时基 TICK
+	unsigned int PreHeatTime;       // 预热时间
+	unsigned int TotalHeatTime;     // 总加热时间
+	unsigned int HeatingTime;       // 当前加热时间
+
+    float adjTemp;          // 温度校准值 加热时目标温度为： CurrTargetTemp + adjTemp
+    float CurrTargetTemp;   //
+    float CurrDetectTemp;   //
+	float CurrResister;     // 发热体阻值
+    float CurrPowerVal;     //
+    float nmos_res; //链接发热体的板载NMOS 内阻
+    float SetPower;
+    float SetVotage;
+    float DetectVotage;
+
+    float Heat_Hot_K; //冷热机 系数 0.78 ~ 1.00
+    float HeatIs1Voltage;
+    uint8_t HeatPuff;
+    
+} HEATER;
+#pragma pack()
+
+
+uint8_t* get_usb_data_handle(void);
+HeatParamInfo_t* get_heat_param_info_handle(void);
+void heat_param_info_init(void);
+ImageHeaderInfo_t* get_image_header_info_handle(void);
+void gui_init(void);
+uint8_t* get_ram_main_gui(void);
+uint8_t* get_ram_second_gui(void);
+uint8_t* get_iap_combine_buf(void);
+
+
+
+void bt_adv_set_en(uint8_t en);
+uint8_t bt_get_adv_en(void);
+
+
+
+
+#endif
+
