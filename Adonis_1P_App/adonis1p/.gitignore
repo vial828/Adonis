@@ -13,7 +13,7 @@
 # !locking_commit.log
 
 # ModusToolbox Configurator generated code and lock file
-GeneratedSource/
+#GeneratedSource/
 *.lock
 .mtbqueryapi
 
