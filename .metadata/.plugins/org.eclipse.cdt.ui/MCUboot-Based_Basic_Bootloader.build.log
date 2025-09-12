@@ -1,0 +1,305 @@
+18:29:06 **** Incremental Build of configuration Debug for project MCUboot-Based_Basic_Bootloader ****
+"C:\\Users\\EVT\\ModusToolbox\\tools_3.2\\modus-shell\\bin\\make" CY_MAKE_IDE=eclipse CY_IDE_TOOLS_DIR=C:/Users/EVT/ModusToolbox/tools_3.2 CY_IDE_BT_TOOLS_DIR= -j16 all 
+/usr/bin/make -C bootloader_cm0p build_proj MTB_APPLICATION_SUBPROJECTS="bootloader_cm0p" MTB_APPLICATION_NAME="MCUboot-Based_Basic_Bootloader" MTB_APPLICATION_PROMOTE=true && true
+make[1]: Entering directory '/cygdrive/c/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p'
+Searching installed tools in progress...
+Searching installed tools complete
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:54: warning: overriding recipe for target 'bsp-assistant'
+libs/mtb.mk:54: warning: ignoring old recipe for target 'bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:60: warning: overriding recipe for target 'mtb_help_tool_bsp-assistant'
+libs/mtb.mk:60: warning: ignoring old recipe for target 'mtb_help_tool_bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:68: warning: overriding recipe for target 'config_bt'
+libs/mtb.mk:68: warning: ignoring old recipe for target 'config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:74: warning: overriding recipe for target 'mtb_help_tool_config_bt'
+libs/mtb.mk:74: warning: ignoring old recipe for target 'mtb_help_tool_config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:82: warning: overriding recipe for target 'bt-configurator'
+libs/mtb.mk:82: warning: ignoring old recipe for target 'bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:88: warning: overriding recipe for target 'mtb_help_tool_bt-configurator'
+libs/mtb.mk:88: warning: ignoring old recipe for target 'mtb_help_tool_bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:96: warning: overriding recipe for target 'capsense-configurator'
+libs/mtb.mk:96: warning: ignoring old recipe for target 'capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:102: warning: overriding recipe for target 'mtb_help_tool_capsense-configurator'
+libs/mtb.mk:102: warning: ignoring old recipe for target 'mtb_help_tool_capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:110: warning: overriding recipe for target 'capsense-tuner'
+libs/mtb.mk:110: warning: ignoring old recipe for target 'capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:116: warning: overriding recipe for target 'mtb_help_tool_capsense-tuner'
+libs/mtb.mk:116: warning: ignoring old recipe for target 'mtb_help_tool_capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:124: warning: overriding recipe for target 'config'
+libs/mtb.mk:124: warning: ignoring old recipe for target 'config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:130: warning: overriding recipe for target 'mtb_help_tool_config'
+libs/mtb.mk:130: warning: ignoring old recipe for target 'mtb_help_tool_config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:138: warning: overriding recipe for target 'device-configurator'
+libs/mtb.mk:138: warning: ignoring old recipe for target 'device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:144: warning: overriding recipe for target 'mtb_help_tool_device-configurator'
+libs/mtb.mk:144: warning: ignoring old recipe for target 'mtb_help_tool_device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:152: warning: overriding recipe for target 'modlibs'
+libs/mtb.mk:152: warning: ignoring old recipe for target 'modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:158: warning: overriding recipe for target 'mtb_help_tool_modlibs'
+libs/mtb.mk:158: warning: ignoring old recipe for target 'mtb_help_tool_modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:166: warning: overriding recipe for target 'library-manager'
+libs/mtb.mk:166: warning: ignoring old recipe for target 'library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:172: warning: overriding recipe for target 'mtb_help_tool_library-manager'
+libs/mtb.mk:172: warning: ignoring old recipe for target 'mtb_help_tool_library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:180: warning: overriding recipe for target 'config_lin'
+libs/mtb.mk:180: warning: ignoring old recipe for target 'config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:186: warning: overriding recipe for target 'mtb_help_tool_config_lin'
+libs/mtb.mk:186: warning: ignoring old recipe for target 'mtb_help_tool_config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:194: warning: overriding recipe for target 'lin-configurator'
+libs/mtb.mk:194: warning: ignoring old recipe for target 'lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:200: warning: overriding recipe for target 'mtb_help_tool_lin-configurator'
+libs/mtb.mk:200: warning: ignoring old recipe for target 'mtb_help_tool_lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:208: warning: overriding recipe for target 'qspi-configurator'
+libs/mtb.mk:208: warning: ignoring old recipe for target 'qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:214: warning: overriding recipe for target 'mtb_help_tool_qspi-configurator'
+libs/mtb.mk:214: warning: ignoring old recipe for target 'mtb_help_tool_qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:222: warning: overriding recipe for target 'seglcd-configurator'
+libs/mtb.mk:222: warning: ignoring old recipe for target 'seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:228: warning: overriding recipe for target 'mtb_help_tool_seglcd-configurator'
+libs/mtb.mk:228: warning: ignoring old recipe for target 'mtb_help_tool_seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:236: warning: overriding recipe for target 'smartio-configurator'
+libs/mtb.mk:236: warning: ignoring old recipe for target 'smartio-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:242: warning: overriding recipe for target 'mtb_help_tool_smartio-configurator'
+libs/mtb.mk:242: warning: ignoring old recipe for target 'mtb_help_tool_smartio-configurator'
+
+
+Initializing build: bootloader_cm0p Release APP_CY8CKIT-062-BLE GCC_ARM
+
+Git submodules for MCUboot exist. Skipping this step...
+make[2]: Entering directory '/cygdrive/c/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p'
+make[2]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+Searching installed tools in progress...
+Searching installed tools complete
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:54: warning: overriding recipe for target 'bsp-assistant'
+libs/mtb.mk:54: warning: ignoring old recipe for target 'bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:60: warning: overriding recipe for target 'mtb_help_tool_bsp-assistant'
+libs/mtb.mk:60: warning: ignoring old recipe for target 'mtb_help_tool_bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:68: warning: overriding recipe for target 'config_bt'
+libs/mtb.mk:68: warning: ignoring old recipe for target 'config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:74: warning: overriding recipe for target 'mtb_help_tool_config_bt'
+libs/mtb.mk:74: warning: ignoring old recipe for target 'mtb_help_tool_config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:82: warning: overriding recipe for target 'bt-configurator'
+libs/mtb.mk:82: warning: ignoring old recipe for target 'bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:88: warning: overriding recipe for target 'mtb_help_tool_bt-configurator'
+libs/mtb.mk:88: warning: ignoring old recipe for target 'mtb_help_tool_bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:96: warning: overriding recipe for target 'capsense-configurator'
+libs/mtb.mk:96: warning: ignoring old recipe for target 'capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:102: warning: overriding recipe for target 'mtb_help_tool_capsense-configurator'
+libs/mtb.mk:102: warning: ignoring old recipe for target 'mtb_help_tool_capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:110: warning: overriding recipe for target 'capsense-tuner'
+libs/mtb.mk:110: warning: ignoring old recipe for target 'capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:116: warning: overriding recipe for target 'mtb_help_tool_capsense-tuner'
+libs/mtb.mk:116: warning: ignoring old recipe for target 'mtb_help_tool_capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:124: warning: overriding recipe for target 'config'
+libs/mtb.mk:124: warning: ignoring old recipe for target 'config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:130: warning: overriding recipe for target 'mtb_help_tool_config'
+libs/mtb.mk:130: warning: ignoring old recipe for target 'mtb_help_tool_config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:138: warning: overriding recipe for target 'device-configurator'
+libs/mtb.mk:138: warning: ignoring old recipe for target 'device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:144: warning: overriding recipe for target 'mtb_help_tool_device-configurator'
+libs/mtb.mk:144: warning: ignoring old recipe for target 'mtb_help_tool_device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:152: warning: overriding recipe for target 'modlibs'
+libs/mtb.mk:152: warning: ignoring old recipe for target 'modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:158: warning: overriding recipe for target 'mtb_help_tool_modlibs'
+libs/mtb.mk:158: warning: ignoring old recipe for target 'mtb_help_tool_modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:166: warning: overriding recipe for target 'library-manager'
+libs/mtb.mk:166: warning: ignoring old recipe for target 'library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:172: warning: overriding recipe for target 'mtb_help_tool_library-manager'
+libs/mtb.mk:172: warning: ignoring old recipe for target 'mtb_help_tool_library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:180: warning: overriding recipe for target 'config_lin'
+libs/mtb.mk:180: warning: ignoring old recipe for target 'config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:186: warning: overriding recipe for target 'mtb_help_tool_config_lin'
+libs/mtb.mk:186: warning: ignoring old recipe for target 'mtb_help_tool_config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:194: warning: overriding recipe for target 'lin-configurator'
+libs/mtb.mk:194: warning: ignoring old recipe for target 'lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:200: warning: overriding recipe for target 'mtb_help_tool_lin-configurator'
+libs/mtb.mk:200: warning: ignoring old recipe for target 'mtb_help_tool_lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:208: warning: overriding recipe for target 'qspi-configurator'
+libs/mtb.mk:208: warning: ignoring old recipe for target 'qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:214: warning: overriding recipe for target 'mtb_help_tool_qspi-configurator'
+libs/mtb.mk:214: warning: ignoring old recipe for target 'mtb_help_tool_qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:222: warning: overriding recipe for target 'seglcd-configurator'
+libs/mtb.mk:222: warning: ignoring old recipe for target 'seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:228: warning: overriding recipe for target 'mtb_help_tool_seglcd-configurator'
+libs/mtb.mk:228: warning: ignoring old recipe for target 'mtb_help_tool_seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:236: warning: overriding recipe for target 'smartio-configurator'
+libs/mtb.mk:236: warning: ignoring old recipe for target 'smartio-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:242: warning: overriding recipe for target 'mtb_help_tool_smartio-configurator'
+libs/mtb.mk:242: warning: ignoring old recipe for target 'mtb_help_tool_smartio-configurator'
+
+
+
+=============================================================
+= Generating cy_flash_map.h and flashmap.mk =
+=============================================================
+../../mtb_shared/core-make/release-v3.3.0/make/scripts/python.bash ./scripts/flashmap.py -p PSOC_062_1M -i ./flashmap/psoc62_overwrite_single_smif.json  -o ./source/cy_flash_map.h > ./flashmap.mk
+=============================================================
+
+make[2]: Leaving directory '/cygdrive/c/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p'
+Prebuild operations complete
+
+Auto-discovery in progress...
+Auto-discovery complete
+Commencing build operations...
+
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:54: warning: overriding recipe for target 'bsp-assistant'
+libs/mtb.mk:54: warning: ignoring old recipe for target 'bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:60: warning: overriding recipe for target 'mtb_help_tool_bsp-assistant'
+libs/mtb.mk:60: warning: ignoring old recipe for target 'mtb_help_tool_bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:68: warning: overriding recipe for target 'config_bt'
+libs/mtb.mk:68: warning: ignoring old recipe for target 'config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:74: warning: overriding recipe for target 'mtb_help_tool_config_bt'
+libs/mtb.mk:74: warning: ignoring old recipe for target 'mtb_help_tool_config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:82: warning: overriding recipe for target 'bt-configurator'
+libs/mtb.mk:82: warning: ignoring old recipe for target 'bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:88: warning: overriding recipe for target 'mtb_help_tool_bt-configurator'
+libs/mtb.mk:88: warning: ignoring old recipe for target 'mtb_help_tool_bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:96: warning: overriding recipe for target 'capsense-configurator'
+libs/mtb.mk:96: warning: ignoring old recipe for target 'capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:102: warning: overriding recipe for target 'mtb_help_tool_capsense-configurator'
+libs/mtb.mk:102: warning: ignoring old recipe for target 'mtb_help_tool_capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:110: warning: overriding recipe for target 'capsense-tuner'
+libs/mtb.mk:110: warning: ignoring old recipe for target 'capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:116: warning: overriding recipe for target 'mtb_help_tool_capsense-tuner'
+libs/mtb.mk:116: warning: ignoring old recipe for target 'mtb_help_tool_capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:124: warning: overriding recipe for target 'config'
+libs/mtb.mk:124: warning: ignoring old recipe for target 'config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:130: warning: overriding recipe for target 'mtb_help_tool_config'
+libs/mtb.mk:130: warning: ignoring old recipe for target 'mtb_help_tool_config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:138: warning: overriding recipe for target 'device-configurator'
+libs/mtb.mk:138: warning: ignoring old recipe for target 'device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:144: warning: overriding recipe for target 'mtb_help_tool_device-configurator'
+libs/mtb.mk:144: warning: ignoring old recipe for target 'mtb_help_tool_device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:152: warning: overriding recipe for target 'modlibs'
+libs/mtb.mk:152: warning: ignoring old recipe for target 'modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:158: warning: overriding recipe for target 'mtb_help_tool_modlibs'
+libs/mtb.mk:158: warning: ignoring old recipe for target 'mtb_help_tool_modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:166: warning: overriding recipe for target 'library-manager'
+libs/mtb.mk:166: warning: ignoring old recipe for target 'library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:172: warning: overriding recipe for target 'mtb_help_tool_library-manager'
+libs/mtb.mk:172: warning: ignoring old recipe for target 'mtb_help_tool_library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:180: warning: overriding recipe for target 'config_lin'
+libs/mtb.mk:180: warning: ignoring old recipe for target 'config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:186: warning: overriding recipe for target 'mtb_help_tool_config_lin'
+libs/mtb.mk:186: warning: ignoring old recipe for target 'mtb_help_tool_config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:194: warning: overriding recipe for target 'lin-configurator'
+libs/mtb.mk:194: warning: ignoring old recipe for target 'lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:200: warning: overriding recipe for target 'mtb_help_tool_lin-configurator'
+libs/mtb.mk:200: warning: ignoring old recipe for target 'mtb_help_tool_lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:208: warning: overriding recipe for target 'qspi-configurator'
+libs/mtb.mk:208: warning: ignoring old recipe for target 'qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:214: warning: overriding recipe for target 'mtb_help_tool_qspi-configurator'
+libs/mtb.mk:214: warning: ignoring old recipe for target 'mtb_help_tool_qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:222: warning: overriding recipe for target 'seglcd-configurator'
+libs/mtb.mk:222: warning: ignoring old recipe for target 'seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:228: warning: overriding recipe for target 'mtb_help_tool_seglcd-configurator'
+libs/mtb.mk:228: warning: ignoring old recipe for target 'mtb_help_tool_seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:236: warning: overriding recipe for target 'smartio-configurator'
+libs/mtb.mk:236: warning: ignoring old recipe for target 'smartio-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:242: warning: overriding recipe for target 'mtb_help_tool_smartio-configurator'
+libs/mtb.mk:242: warning: ignoring old recipe for target 'mtb_help_tool_smartio-configurator'
+
+Constructing build rules...
+Build rules construction complete
+
+==============================================================================
+= Building application =
+==============================================================================
+Generating compilation database file...
+-> ./build/compile_commands.json
+Compilation database file generation complete
+Building 340 file(s)
+C:/Users/EVT/ModusToolbox/tools_3.2/gcc/bin/arm-none-eabi-objcopy ./build/APP_CY8CKIT-062-BLE/Release/bootloader_cm0p.elf -S -O binary ./build/APP_CY8CKIT-062-BLE/Release/bootloader_cm0p.bin; C:/Users/EVT/ModusToolbox/tools_3.2/srecord/bin/srec_cat ./build/APP_CY8CKIT-062-BLE/Release/bootloader_cm0p.hex -intel -exclude 0x16000000 0x16007FFF -o ./build/APP_CY8CKIT-062-BLE/Release/bootloader_cm0p_stripped.hex -intel --Output_Block_Size 16; C:/Users/EVT/ModusToolbox/tools_3.2/airoc-tools/IntelHexToBin/bin/IntelHexToBin ./build/APP_CY8CKIT-062-BLE/Release/bootloader_cm0p_stripped.hex ./build/APP_CY8CKIT-062-BLE/Release/bootloader_cm0p_stripped.bin;
+==============================================================================
+= Build complete =
+==============================================================================
+
+Calculating memory consumption: CY8C6347BZI-BLD53 GCC_ARM
+
+   ---------------------------------------------------- 
+  | Section Name         |  Address      |  Size       | 
+   ---------------------------------------------------- 
+  | .text                |  0x10000000   |  94136      | 
+  | .ARM.exidx           |  0x10016fb8   |  8          | 
+  | .copy.table          |  0x10016fc0   |  24         | 
+  | .zero.table          |  0x10016fd8   |  8          | 
+  | .data                |  0x080000c0   |  1288       | 
+  | .cy_sharedmem        |  0x080005c8   |  28         | 
+  | .noinit              |  0x080005e8   |  116        | 
+  | .bss                 |  0x0800065c   |  183012     | 
+  | .heap                |  0x0802d140   |  73408      | 
+  | PROGBITS             |  0x16000800   |  8          | 
+  | .cy_toc_part2        |  0x16007c00   |  512        | 
+   ---------------------------------------------------- 
+
+  Total Internal Flash (Available)          1048576    
+  Total Internal Flash (Utilized)           95500      
+
+
+make[1]: Leaving directory '/cygdrive/c/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p'
+/usr/bin/make -C bootloader_cm0p application_postbuild MTB_APPLICATION_SUBPROJECTS="bootloader_cm0p"
+make[1]: Entering directory '/cygdrive/c/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p'
+Searching installed tools in progress...
+Searching installed tools complete
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:54: warning: overriding recipe for target 'bsp-assistant'
+libs/mtb.mk:54: warning: ignoring old recipe for target 'bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:60: warning: overriding recipe for target 'mtb_help_tool_bsp-assistant'
+libs/mtb.mk:60: warning: ignoring old recipe for target 'mtb_help_tool_bsp-assistant'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:68: warning: overriding recipe for target 'config_bt'
+libs/mtb.mk:68: warning: ignoring old recipe for target 'config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:74: warning: overriding recipe for target 'mtb_help_tool_config_bt'
+libs/mtb.mk:74: warning: ignoring old recipe for target 'mtb_help_tool_config_bt'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:82: warning: overriding recipe for target 'bt-configurator'
+libs/mtb.mk:82: warning: ignoring old recipe for target 'bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:88: warning: overriding recipe for target 'mtb_help_tool_bt-configurator'
+libs/mtb.mk:88: warning: ignoring old recipe for target 'mtb_help_tool_bt-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:96: warning: overriding recipe for target 'capsense-configurator'
+libs/mtb.mk:96: warning: ignoring old recipe for target 'capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:102: warning: overriding recipe for target 'mtb_help_tool_capsense-configurator'
+libs/mtb.mk:102: warning: ignoring old recipe for target 'mtb_help_tool_capsense-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:110: warning: overriding recipe for target 'capsense-tuner'
+libs/mtb.mk:110: warning: ignoring old recipe for target 'capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:116: warning: overriding recipe for target 'mtb_help_tool_capsense-tuner'
+libs/mtb.mk:116: warning: ignoring old recipe for target 'mtb_help_tool_capsense-tuner'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:124: warning: overriding recipe for target 'config'
+libs/mtb.mk:124: warning: ignoring old recipe for target 'config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:130: warning: overriding recipe for target 'mtb_help_tool_config'
+libs/mtb.mk:130: warning: ignoring old recipe for target 'mtb_help_tool_config'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:138: warning: overriding recipe for target 'device-configurator'
+libs/mtb.mk:138: warning: ignoring old recipe for target 'device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:144: warning: overriding recipe for target 'mtb_help_tool_device-configurator'
+libs/mtb.mk:144: warning: ignoring old recipe for target 'mtb_help_tool_device-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:152: warning: overriding recipe for target 'modlibs'
+libs/mtb.mk:152: warning: ignoring old recipe for target 'modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:158: warning: overriding recipe for target 'mtb_help_tool_modlibs'
+libs/mtb.mk:158: warning: ignoring old recipe for target 'mtb_help_tool_modlibs'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:166: warning: overriding recipe for target 'library-manager'
+libs/mtb.mk:166: warning: ignoring old recipe for target 'library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:172: warning: overriding recipe for target 'mtb_help_tool_library-manager'
+libs/mtb.mk:172: warning: ignoring old recipe for target 'mtb_help_tool_library-manager'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:180: warning: overriding recipe for target 'config_lin'
+libs/mtb.mk:180: warning: ignoring old recipe for target 'config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:186: warning: overriding recipe for target 'mtb_help_tool_config_lin'
+libs/mtb.mk:186: warning: ignoring old recipe for target 'mtb_help_tool_config_lin'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:194: warning: overriding recipe for target 'lin-configurator'
+libs/mtb.mk:194: warning: ignoring old recipe for target 'lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:200: warning: overriding recipe for target 'mtb_help_tool_lin-configurator'
+libs/mtb.mk:200: warning: ignoring old recipe for target 'mtb_help_tool_lin-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:208: warning: overriding recipe for target 'qspi-configurator'
+libs/mtb.mk:208: warning: ignoring old recipe for target 'qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:214: warning: overriding recipe for target 'mtb_help_tool_qspi-configurator'
+libs/mtb.mk:214: warning: ignoring old recipe for target 'mtb_help_tool_qspi-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:222: warning: overriding recipe for target 'seglcd-configurator'
+libs/mtb.mk:222: warning: ignoring old recipe for target 'seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:228: warning: overriding recipe for target 'mtb_help_tool_seglcd-configurator'
+libs/mtb.mk:228: warning: ignoring old recipe for target 'mtb_help_tool_seglcd-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:236: warning: overriding recipe for target 'smartio-configurator'
+libs/mtb.mk:236: warning: ignoring old recipe for target 'smartio-configurator'
+C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p/libs/mtb.mk:242: warning: overriding recipe for target 'mtb_help_tool_smartio-configurator'
+libs/mtb.mk:242: warning: ignoring old recipe for target 'mtb_help_tool_smartio-configurator'
+
+
+Generating combined hex file: C:/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/build/app_combined.hex
+make[1]: Leaving directory '/cygdrive/c/Projects/Adonis/Adonis_1P_Boot/MCUboot-Based_Basic_Bootloader/bootloader_cm0p'
+
+18:29:12 Build Finished. 0 errors, 224 warnings. (took 6s.89ms)
+

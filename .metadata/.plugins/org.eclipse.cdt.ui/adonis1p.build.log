@@ -1,0 +1,94 @@
+18:27:46 **** Incremental Build of configuration Debug for project adonis1p ****
+"C:\\Users\\EVT\\ModusToolbox\\tools_3.2\\modus-shell\\bin\\make" CY_MAKE_IDE=eclipse CY_IDE_TOOLS_DIR=C:/Users/EVT/ModusToolbox/tools_3.2 CY_IDE_BT_TOOLS_DIR= -j16 --output-sync all 
+include flashmap.mk
+Tools Directory: C:/Users/EVT/ModusToolbox/tools_3.2
+Searching installed tools in progress...
+Searching installed tools complete
+
+
+"flashmap.py ../mtb_shared/core-make/release-v3.3.0/make/scripts/python.bash ../mtb_shared/ota-update/release-v2.0.0/scripts/flashmap.py -p PSOC_062_1M -i ../mtb_shared/ota-update/release-v2.0.0/configs/flashmap/psoc62_1m_ext_overwrite_single2000.json > flashmap.mk"
+include flashmap.mk
+Initializing build: adonis1p Release APP_CY8CKIT-062-BLE GCC_ARM
+
+Prebuild operations complete
+
+Auto-discovery in progress...
+Auto-discovery complete
+Commencing build operations...
+
+include flashmap.mk
+Tools Directory: C:/Users/EVT/ModusToolbox/tools_3.2
+
+Constructing build rules...
+Build rules construction complete
+"flashmap.py ../mtb_shared/core-make/release-v3.3.0/make/scripts/python.bash ../mtb_shared/ota-update/release-v2.0.0/scripts/flashmap.py -p PSOC_062_1M -i ../mtb_shared/ota-update/release-v2.0.0/configs/flashmap/psoc62_1m_ext_overwrite_single2000.json > flashmap.mk"
+include flashmap.mk
+
+==============================================================================
+= Building application =
+==============================================================================
+Generating compilation database file...
+-> ./build/compile_commands.json
+Compilation database file generation complete
+Building 480 file(s)
+../mtb_shared/ota-update/release-v2.0.0/scripts/sign_script.bash ./build/APP_CY8CKIT-062-BLE/Release adonis1p ../mtb_shared/core-make/release-v3.3.0/make/scripts/python.bash C:/Users/EVT/ModusToolbox/tools_3.2/gcc/bin/arm-none-eabi-objcopy "-O ihex" "elf_first" ../mtb_shared/ota-update/release-v2.0.0/source/port_support/mcuboot imgtool/imgtool.py sign 0xFF 0x400 1536 4.1.1 0x020000 0x0c0000 "C:/Users/EVT/ModusToolbox/tools_3.2/gcc/bin/arm-none-eabi-objcopy" "-k ./source/3_middleware/config/secret_keys/adonis_key_ec_p256.pem"
+
+Create  unsigned.hex
+imgtool sign signed .hex.
+imgtool/imgtool.py sign  -e little --pad-header --align 8 -H 0x400 -M 1536 -v 4.1.1 -L 0x020000 -S 0x0c0000 -k ./source/3_middleware/config/secret_keys/adonis_key_ec_p256.pem ./build/APP_CY8CKIT-062-BLE/Release/adonis1p.unsigned.hex ./build/APP_CY8CKIT-062-BLE/Release/adonis1p.hex
+Signed .hex to .bin
+/cygdrive/c/Projects/Adonis/Adonis_1P_App/adonis1p/build/APP_CY8CKIT-062-BLE/Release /cygdrive/c/Projects/Adonis/Adonis_1P_App/adonis1p
+Create tarball
+/cygdrive/c/Projects/Adonis/Adonis_1P_App/adonis1p
+/cygdrive/c/Projects/Adonis/Adonis_1P_App/adonis1p/build/APP_CY8CKIT-062-BLE/Release /cygdrive/c/Projects/Adonis/Adonis_1P_App/adonis1p
+
+Application Name                         : adonis1p
+Application Version                      : 4.1.1
+Cypress MCUBoot Header size              : 0x400
+Primary 1 Slot Start                     : 0x020000
+Primary 1 Slot Size                      : 0x0c0000
+FLASH ERASE Value                        : 0xFF
+Max 512 bytes sectors for Application    : 1536
+
+-rw-r--r-- 1 EVT 197121  494579 Sep 12 18:27 adonis1p.bin
+-rw-r--r-- 1 EVT 197121 3947696 Sep 12 18:05 adonis1p.elf
+-rw-r--r-- 1 EVT 197121 1391163 Sep 12 18:27 adonis1p.hex
+-rw-r--r-- 1 EVT 197121 1500689 Sep 12 18:05 adonis1p.map
+-rw-r--r-- 1 EVT 197121    3474 Sep 12 18:05 adonis1p.readelf
+-rw-r--r-- 1 EVT 197121  501760 Sep 12 18:27 adonis1p.tar
+-rw-r--r-- 1 EVT 197121  493740 Sep 11 16:55 adonis1p.unsigned.bin
+-rw-r--r-- 1 EVT 197121 1334128 Sep 12 18:27 adonis1p.unsigned.hex
+
+adonis1p.tar File List
+components.json
+adonis1p.bin
+
+==============================================================================
+= Build complete =
+==============================================================================
+
+Calculating memory consumption: CY8C6347FMI-BLD53 GCC_ARM
+
+   ---------------------------------------------------- 
+  | Section Name         |  Address      |  Size       | 
+   ---------------------------------------------------- 
+  | .cy_m0p_image        |  0x10020400   |  111948     | 
+  | .text                |  0x10040400   |  358020     | 
+  | .ARM.exidx           |  0x10097a84   |  8          | 
+  | .copy.table          |  0x10097a8c   |  24         | 
+  | .zero.table          |  0x10097aa4   |  8          | 
+  | .data                |  0x08003a8c   |  4268       | 
+  | .cy_sharedmem        |  0x08004b38   |  4          | 
+  | .noinit              |  0x08004b40   |  72         | 
+  | .bss                 |  0x08004b88   |  196000     | 
+  | .heap                |  0x08034928   |  65240      | 
+  | .cy_em_eeprom        |  0x14000000   |  32768      | 
+   ---------------------------------------------------- 
+
+  Total Internal Flash (Available)          1048576    
+  Total Internal Flash (Utilized)           494436     
+
+
+
+18:27:52 Build Finished. 0 errors, 0 warnings. (took 6s.314ms)
+

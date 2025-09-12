@@ -1,0 +1,7 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:adonis1p Attach (JLink),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Attach (KitProg3_MiniProg4),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Debug (JLink),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Debug (KitProg3_MiniProg4),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Erase (JLink),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Erase (KitProg3_MiniProg4),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Program (JLink),org.eclipse.launchbar.core.descriptorType.default\:adonis1p Program (KitProg3_MiniProg4)
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:adonis1p\ Attach\ (JLink)/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:adonis1p\ Attach\ (JLink)/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
