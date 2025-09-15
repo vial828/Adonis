@@ -499,6 +499,7 @@ TaskHandle_t* get_task_bt_handle(void)
 
 void bt_init(void)
 {
+#if 0
     wiced_result_t  result;
     /* Initialising the HCI UART for Host contol */
     cybt_platform_config_init(&cybsp_bt_platform_cfg);
@@ -519,6 +520,7 @@ void bt_init(void)
         sm_log(SM_LOG_ERR,  "Bluetooth Stack Initialization failed!! \r\n");
         CY_ASSERT(0);
     }
+#endif
 }
 
 /*

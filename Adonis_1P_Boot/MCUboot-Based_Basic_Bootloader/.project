@@ -3,8 +3,6 @@
 	<name>MCUboot-Based_Basic_Bootloader</name>
 	<comment></comment>
 	<projects>
-		<project>MCUboot-Based_Basic_Bootloader.blinky_cm4</project>
-		<project>MCUboot-Based_Basic_Bootloader.bootloader_cm0p</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

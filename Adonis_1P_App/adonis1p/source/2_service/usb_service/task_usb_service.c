@@ -33,6 +33,7 @@
 #include "cyhal_gpio.h"
 #include "wiced_bt_l2c.h"
 #include "cyabs_rtos.h"
+#include "heat_monitor.h"
 
 #if defined(BLE_PROFILES_PROTOCOL_SUPPORT)
 #include "ota.h"
@@ -593,6 +594,7 @@ void copy_data_to_log(ComtLogParam_t *logInfo, ComtLogTime_t *comtLogTime)
         logInfo->power_J = 0;
     }
     logInfo->dcow = p_tMontorDataInfo->det.heat_P;
+	logInfo->power_J = Kalman_Update(logInfo->dcow);
     logInfo->htres = p_tMontorDataInfo->det.heat_R;
     //   logInfo.ses_J = ;
     logInfo->batt = p_tMontorDataInfo->bat.temperature;

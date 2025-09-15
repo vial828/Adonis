@@ -68,7 +68,7 @@ TOOLCHAIN=GCC_ARM
 #
 # If CONFIG is manually edited, ensure to update or regenerate launch configurations
 # for your IDE.
-CONFIG=Debug
+CONFIG=Release
 
 # If set to "true" or "1", display full command-lines when building.
 VERBOSE=
@@ -195,13 +195,8 @@ ifeq ($(OTA_SUPPORT),1)
         OTA_FLASH_MAP?=$(SEARCH_ota-update)/configs/flashmap/psoc62_2m_ext_swap_single.json
     else ifeq ($(TARGET), APP_CY8CKIT-062-BLE)
         OTA_PLATFORM=PSOC_062_1M
-		
-#        COMPONENTS+=CM0P_BLESS_OTA
-#        DISABLE_COMPONENTS+=CM0P_BLESS
-        DISABLE_COMPONENTS+=CM0P_BLESS_OTA
-        #COMPONENTS+=CM0P_BLESS
-        COMPONENTS+=CM0P_SLEEP
-		
+        COMPONENTS+=CM0P_BLESS_OTA
+        DISABLE_COMPONENTS+=CM0P_BLESS
        # OTA_FLASH_MAP?=$(SEARCH_ota-update)/configs/flashmap/psoc62_1m_cm0_int_swap_single.json
        #wanggankun@2024-8-29, modify, �޸�flash map(psoc62_1m_ext_overwrite_single2000.json)�ļ��������ⲿflashΪ��������
        # OTA_FLASH_MAP?=$(SEARCH_ota-update)/configs/flashmap/psoc62_overwrite_single20000.json
@@ -398,8 +393,8 @@ ifeq ($(OTA_SUPPORT),1)
 	    endif
     endif
 
-#    LINKER_SCRIPT_WILDCARD=$(OTA_LINKER_SCRIPT_BASE_DIR)/*$(OTA_LINKER_SCRIPT_TYPE).$(CY_TOOLCHAIN_LS_EXT)
-#    LINKER_SCRIPT=$(wildcard $(LINKER_SCRIPT_WILDCARD))
+    LINKER_SCRIPT_WILDCARD=$(OTA_LINKER_SCRIPT_BASE_DIR)/*$(OTA_LINKER_SCRIPT_TYPE).$(CY_TOOLCHAIN_LS_EXT)
+    LINKER_SCRIPT=$(wildcard $(LINKER_SCRIPT_WILDCARD))
 
     ###################################################################################################
     # OTA POST BUILD scripting
@@ -435,11 +430,11 @@ ifeq ($(OTA_SUPPORT),1)
     # IMGTOOL_COMMAND_ARG=create
     # CY_SIGNING_KEY_ARG=" "
 
-#    POSTBUILD=$(SIGN_SCRIPT_FILE_PATH) $(OUTPUT_FILE_PATH) $(APPNAME) $(CY_PYTHON_PATH)\
-#              $(CY_ELF_TO_HEX) $(CY_ELF_TO_HEX_OPTIONS) $(CY_ELF_TO_HEX_FILE_ORDER)\
-#              $(MCUBOOT_SCRIPT_FILE_DIR) $(IMGTOOL_SCRIPT_NAME) $(IMGTOOL_COMMAND_ARG) $(FLASH_ERASE_SECONDARY_SLOT_VALUE) $(MCUBOOT_HEADER_SIZE)\
-#              $(MCUBOOT_MAX_IMG_SECTORS) $(APP_BUILD_VERSION) $(FLASH_AREA_IMG_1_PRIMARY_START) $(FLASH_AREA_IMG_1_PRIMARY_SIZE)\
-#              $(CY_HEX_TO_BIN) $(CY_SIGNING_KEY_ARG)
+    POSTBUILD=$(SIGN_SCRIPT_FILE_PATH) $(OUTPUT_FILE_PATH) $(APPNAME) $(CY_PYTHON_PATH)\
+              $(CY_ELF_TO_HEX) $(CY_ELF_TO_HEX_OPTIONS) $(CY_ELF_TO_HEX_FILE_ORDER)\
+              $(MCUBOOT_SCRIPT_FILE_DIR) $(IMGTOOL_SCRIPT_NAME) $(IMGTOOL_COMMAND_ARG) $(FLASH_ERASE_SECONDARY_SLOT_VALUE) $(MCUBOOT_HEADER_SIZE)\
+              $(MCUBOOT_MAX_IMG_SECTORS) $(APP_BUILD_VERSION) $(FLASH_AREA_IMG_1_PRIMARY_START) $(FLASH_AREA_IMG_1_PRIMARY_SIZE)\
+              $(CY_HEX_TO_BIN) $(CY_SIGNING_KEY_ARG)
 
 else #OTA_SUPPORT
 

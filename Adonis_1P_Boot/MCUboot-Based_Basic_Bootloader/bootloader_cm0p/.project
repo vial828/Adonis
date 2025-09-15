@@ -3,8 +3,6 @@
 	<name>MCUboot-Based_Basic_Bootloader.bootloader_cm0p</name>
 	<comment></comment>
 	<projects>
-		<project>MCUboot-Based_Basic_Bootloader.blinky_cm4</project>
-		<project>MCUboot-Based_Basic_Bootloader</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -29,14 +27,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>external_dirs</name>
-			<type>2</type>
-			<locationURI>PARENT-0-PROJECT_LOC/./keys</locationURI>
-		</link>
-		<link>
 			<name>external_files</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>external_dirs</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>external_dirs/.</name>
+			<type>2</type>
+			<locationURI>PARENT-0-PROJECT_LOC/./keys</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

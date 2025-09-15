@@ -141,6 +141,7 @@ bool is_sw_on(void)
 void disable_swd(void)
 {
 #ifdef DEF_BLE_APP_GROUP_EN // 蓝牙app团队 升级不要按按键
+	sm_log(SM_LOG_ERR, "Bypass disable swd!\n");
 
 #else //for the moment, remove this SWD restriction while burning fw on BLE versions
     Cy_GPIO_SetHSIOM(GPIO_PRT6, 7UL, HSIOM_SEL_GPIO);

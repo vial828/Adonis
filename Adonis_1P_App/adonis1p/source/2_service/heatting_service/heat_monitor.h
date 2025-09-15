@@ -22,9 +22,9 @@ typedef struct {
 
  
 
-void Kalman_Init(KalmanFilter *kf, float init_x, float init_p, float q, float r);
+void Kalman_Init(float init_x, float init_p, float q, float r);
 
-float Kalman_Update(KalmanFilter *kf, float z);
+float Kalman_Update(float z);
 
  
 

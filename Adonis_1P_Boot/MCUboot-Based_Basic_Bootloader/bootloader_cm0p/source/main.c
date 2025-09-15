@@ -245,7 +245,25 @@ int main(void)
     BOOT_LOG_INF("MCUBoot Bootloader Started");
     char ver[] = "3.0.0\n";
     BOOT_LOG_INF("Boot Version : %s", ver);
+    ///////////////////////////////////////////////////////
+    cy_retarget_io_wait_tx_complete(CYBSP_UART_HW, 10);
+    cy_retarget_io_pdl_deinit();
+    Cy_GPIO_Port_Deinit(CYBSP_DEBUG_UART_RX_PORT);
+    Cy_GPIO_Port_Deinit(CYBSP_DEBUG_UART_TX_PORT);
+    psoc6_launch_cm0p_app(0x10020400);
 
+    while (true)
+    {
+        if (1)
+        {
+            (void)Cy_SysPm_CpuEnterDeepSleep(CY_SYSPM_WAIT_FOR_INTERRUPT);
+        }
+        else
+        {
+            __WFI();
+        }
+    }
+/////////////////////////////////////////////////////////
     //wanggankun@2024-8-16, note, 如下这段，是在FLASH的尾部，读取版本信息。如果FLASH存的版本，跟内存中指定的版本不一致，
     //则，重写FLASH中的版本号
     //uint32_t programAddr = 0x10000000u + (1024* 1024u) - (3 * 512u);

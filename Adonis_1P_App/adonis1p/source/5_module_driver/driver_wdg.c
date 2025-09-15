@@ -26,7 +26,7 @@
 #include "string.h"
 #include "driver_wdg.h"
 
-#define ENABLE_DRIVER_WDG
+//#define ENABLE_DRIVER_WDG
 #include "cyhal_wdt.h"
 #ifdef ENABLE_DRIVER_WDG
 cyhal_wdt_t wdt_obj;

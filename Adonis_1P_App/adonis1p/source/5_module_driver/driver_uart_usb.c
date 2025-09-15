@@ -260,10 +260,10 @@ int driver_usb_init(void)
 	gs_usb.xSemaphore_tx = xSemaphoreCreateBinary();
 
 	// MCU APP启动后先禁止SWD，防止充电DPDM影响MCU启动
-    Cy_GPIO_SetHSIOM(GPIO_PRT6, 7UL, HSIOM_SEL_GPIO);
-    Cy_GPIO_SetDrivemode(GPIO_PRT6, 7UL, CY_GPIO_DM_ANALOG);
-    Cy_GPIO_SetHSIOM(GPIO_PRT6, 6UL, HSIOM_SEL_GPIO);
-    Cy_GPIO_SetDrivemode(GPIO_PRT6, 6UL, CY_GPIO_DM_ANALOG);
+    //Cy_GPIO_SetHSIOM(GPIO_PRT6, 7UL, HSIOM_SEL_GPIO);
+    //Cy_GPIO_SetDrivemode(GPIO_PRT6, 7UL, CY_GPIO_DM_ANALOG);
+    //Cy_GPIO_SetHSIOM(GPIO_PRT6, 6UL, HSIOM_SEL_GPIO);
+    //Cy_GPIO_SetDrivemode(GPIO_PRT6, 6UL, CY_GPIO_DM_ANALOG);
     // GPOUT脉冲,至少200us的高电平
 	cyhal_gpio_init(P9_3, CYHAL_GPIO_DIR_OUTPUT, CYHAL_GPIO_DRIVE_STRONG, 0);
 	cyhal_gpio_write(P9_3, 1);
