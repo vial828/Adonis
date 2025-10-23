@@ -1,32 +1,13 @@
-// kalman_filter.h
+#include <stdint.h>
+#include "data_base_info.h"
 
-#ifndef KALMAN_FILTER_H
+#ifndef HEAT_MONITOR_H
 
-#define KALMAN_FILTER_H
+#define HEAT_MONITOR_H
 
- 
+void heat_monitor_init(void);
+void heat_monitor(HEATER* heater);
+extern float delta_t;
 
-typedef struct {
-
-    float x;      // Estimated value
-
-    float p;      // Estimation error covariance
-
-    float q;      // Process noise covariance
-
-    float r;      // Measurement noise covariance
-
-    float k;      // Kalman gain
-
-} KalmanFilter;
-
- 
-
-void Kalman_Init(float init_x, float init_p, float q, float r);
-
-float Kalman_Update(float z);
-
- 
-
-#endif // KALMAN_FILTER_H
+#endif // HEAT_MONITOR_H
 

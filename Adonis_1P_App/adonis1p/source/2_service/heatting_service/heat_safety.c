@@ -406,7 +406,8 @@ uint8_t HalSafetyProc(HEATER *Heat_t)
             add_index = 0;
             temp_k_add_sum = 0;
         }
-    //------------------------------热电偶 开路保护检测--------------------------------------//
+#if 0
+	//------------------------------热电偶 开路保护检测--------------------------------------//
     if(Heat_t->HeatingTime >= 5000)
     {
         if((Heat_t->CurrDetectTemp < 100.0f) || ((p_debugDataInfo->dbgBit & DEBUG_THEAT) && (p_debugDataInfo->det.heat_K_temp <= 100.0f)))
@@ -422,6 +423,7 @@ uint8_t HalSafetyProc(HEATER *Heat_t)
             filter_thermocouple_err_cnt = 0;
         }
     }
+#endif
     //------------------------------加热过程电压低1--------------------------------------//
     if(Heat_t->HeatingTime >= 3000)  // 3000, 加热过程电芯低压
     {
@@ -847,7 +849,7 @@ uint8_t HalSafetyProc(HEATER *Heat_t)
                // if((hlt.temp_k > heater_bk_threshold_K || hlt.temp_k < heater_bk_threshold_LK)&& HEAT_BY_KEY == get_heat_type())  // pctool 指令方式加热，不做断针保护，因工厂需要干烧测试
                 if(flag_pin_break && HEAT_BY_KEY == get_heat_type())
                 {
-#ifdef DEF_PIN_BROKE_EN // 启用断针保护
+#if DEF_PIN_BROKE_EN // 启用断针保护
                     heat_stop(FLT_DE_TC_SPIKE);
                     rts_prt_flag = 1;
                     add_error_even(FLT_DE_TC_SPIKE);  

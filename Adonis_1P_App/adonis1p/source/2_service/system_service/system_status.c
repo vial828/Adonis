@@ -27,7 +27,6 @@
 #include "platform_io.h"
 #include "data_base_info.h"
 #include "err_code.h"
-#include "heat_monitor.h"
 
 volatile SysStatus_u g_usysStaus = 0;
 static volatile uint32_t idl_runTimeMs = 0;
@@ -58,8 +57,6 @@ SysStatus_u get_system_status(void)
 void set_system_status(SysStatus_u usysStatus)
 {
     g_usysStaus = usysStatus;
-	if( HEATTING_STANDARD == g_usysStaus || HEATTING_BOOST == g_usysStaus )
-		Kalman_Init(14, 1.000, 0.001, 1.000);
     sm_log(SM_LOG_INFO, "set_system_status! %d\r\n", g_usysStaus);
 }
 

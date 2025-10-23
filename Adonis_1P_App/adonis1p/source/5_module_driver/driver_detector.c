@@ -29,6 +29,8 @@
 #include "driver_heater.h"
 #include "driver_mcu_eeprom.h"
 #include "data_base_info.h"
+#include "heat_monitor.h"
+
 //#define BOARD_V2   
 #define BOARD_V3   
 
@@ -139,7 +141,7 @@ float hal_get_heat_k_temp(uint32_t opa_volt,uint32_t ntc_mV)
 	volt = ((float)opa_volt) / 100.0f;	//热电偶电压，单位mV
     /*热电偶电压转换成温度*/
 	volt_cood = interpolate_voltage(hal_get_k_cood_temp(ntc_mV));
-    rts = interpolate_temperature(volt + volt_cood) ;
+    rts = interpolate_temperature(volt + volt_cood) + delta_t;
 
 	return rts;//rts;
 

@@ -138,6 +138,9 @@ typedef enum
 #define PROC_CMD_SetGetDryHeatRefParam  0XCB
 #define PROC_CMD_GetSPVerPinBrokeParam  0XCC
 #define	PROC_CMD_SetHeatingProfileSel	0xD0
+
+#define PROC_CMD_SetDeltaT				0xE0
+#define PROC_CMD_SetWThres				0xE1
 //case pen protoclo
 typedef struct
 {

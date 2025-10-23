@@ -29,7 +29,7 @@
 
 /*************编译前需要检查的宏开关*****************/
 #define DE_RDP_ON_EN   0 // 只有发工厂出货的版本才打开此宏，此宏加密后 SWD无法复原
-#define DEF_PIN_BROKE_EN 1 // 使能断针保护( 给蓝牙app团队时，该宏需要关闭，需干烧测试， 防止版本过多，OTA文件比此宏关闭)
+#define DEF_PIN_BROKE_EN 0 // 使能断针保护( 给蓝牙app团队时，该宏需要关闭，需干烧测试， 防止版本过多，OTA文件比此宏关闭)
 #define DEF_BLE_EN 1 // 使能蓝牙
 //#define FACTORY_PROD 1 // 工厂生产，不能设置温控曲线，自清洁曲线， 校温曲线暂时可设置
 #define DEF_BLE_APP_GROUP_EN 1 // 给蓝牙app团队时，该宏需要打开

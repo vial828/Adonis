@@ -11,6 +11,8 @@
 #include "system_status.h"
 #include "system_interaction_logic.h"
 #include "task_system_service.h"
+#include "heat_monitor.h"
+
 #if defined(BLE_PROFILES_PROTOCOL_SUPPORT)
 #include "event_data_record.h"
 #include "app_bt_char_adapter.h"
@@ -2692,6 +2694,12 @@ static uint16_t cmd_set_heatingProfileSel(ProtocolBase_t *pBuf)
 	}
 }
 
+static uint16_t cmd_set_delta_t(ProtocolBase_t *pBuf)
+{
+	
+	delta_t = (float)pBuf->pData[0];
+	return 1;
+}
 extern uint8_t app_bt_adv_conn_state;
 extern bool app_bt_gatt_is_connected(void);
 /*---------------------------------------------------------------------------*/
@@ -3015,7 +3023,8 @@ static const CmdProtocol_t cmdListUsb[]=
 	{PROC_CMD_SetHeatingProfileSel,	cmd_set_heatingProfileSel},
 	
     {PROC_CMD_SetGetDryHeatRefParam,    cmd_get_set_dry_heat_data},
-    {PROC_CMD_GetSPVerPinBrokeParam,    cmd_get_set_sp_pin_broke_threshold}
+    {PROC_CMD_GetSPVerPinBrokeParam,    cmd_get_set_sp_pin_broke_threshold},
+    {PROC_CMD_SetDeltaT,    cmd_set_delta_t},
 };
 
 int filter_cmd_rdp_on(ProtocolBase_t *pFrame)
@@ -3142,6 +3151,8 @@ int frame_parse_usb(uint8_t *pBuf,uint16_t rxLen)
 	{
 		if(pFrame->cmd == cmdListUsb[i].dataCmd && cmdListUsb[i].func != NULL)
 		{
+			if(pFrame->cmd == PROC_CMD_GetSN)
+				return;
 			return (int)cmdListUsb[i].func(pFrame);
 		}
 	}

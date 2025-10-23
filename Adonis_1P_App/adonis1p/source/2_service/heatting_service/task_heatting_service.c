@@ -42,6 +42,8 @@
 #include "err_code.h"
 #include "system_interaction_logic.h"
 #include "app_bt_char_adapter.h"
+#include "heat_monitor.h"
+
 //#include "driver_mcu_eeprom.h"
 
 #if defined(BLE_PROFILES_PROTOCOL_SUPPORT)
@@ -856,6 +858,7 @@ void task_heatting_service(void *pvParam)
                     start_check = 0;
                     if(start_check == 0){
                         heat_start();
+						heat_monitor_init();
                         log_intv = 0;
                         update_log_pollCnt();
                         status = 1;
@@ -951,6 +954,8 @@ void task_heatting_service(void *pvParam)
                     stHeatManager.SetPower = range_1000_0_to_power(heat_out,MAX_POWER);//PID输出 0 - 1000 转化为 0 - power_max W
                     stHeatManager.Heating_J += stHeatManager.CurrPowerVal/50;//1焦耳 = 1WS 
                     //---------------------保护算法逻辑--------------------------
+                    heat_monitor(&stHeatManager);
+					
                     if(sysStatus == HEATTING_STANDARD || sysStatus == HEATTING_BOOST || sysStatus == HEATTING_CLEAN){
                         uint8_t prt_flag = 0;
                         prt_flag = HalSafetyProc(&stHeatManager);
