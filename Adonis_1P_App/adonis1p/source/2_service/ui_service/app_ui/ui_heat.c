@@ -458,7 +458,7 @@ void amoled_display_heat_consume_all(SysStatus_u sysStatus)
     rowCntVal = (heatTime / disp_dly) - (maxHeigh * oneRowTimeCycle);
     rowCntVal = maxHeigh - rowCntVal; // (x+y=170)
 	moveOneRowTime = oneRowTimeCycle * disp_dly;
-    sm_log(SM_LOG_DEBUG, "heatTime:%d, oneRowTime:%d, cntx:%d\r\n", heatTime, moveOneRowTime, rowCntVal);
+   // sm_log(SM_LOG_DEBUG, "heatTime:%d, oneRowTime:%d, cntx:%d\r\n", heatTime, moveOneRowTime, rowCntVal);
 
     msSmokeTick = msTickDev->read((uint8_t*)&msSmokeTick, 4);
     msTickInterval = msTickDev->read((uint8_t*)&msTickInterval, 4);

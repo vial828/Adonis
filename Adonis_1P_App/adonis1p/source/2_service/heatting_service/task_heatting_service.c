@@ -954,8 +954,7 @@ void task_heatting_service(void *pvParam)
                     stHeatManager.SetPower = range_1000_0_to_power(heat_out,MAX_POWER);//PID输出 0 - 1000 转化为 0 - power_max W
                     stHeatManager.Heating_J += stHeatManager.CurrPowerVal/50;//1焦耳 = 1WS 
                     //---------------------保护算法逻辑--------------------------
-                    heat_monitor(&stHeatManager);
-					
+					#if 0
                     if(sysStatus == HEATTING_STANDARD || sysStatus == HEATTING_BOOST || sysStatus == HEATTING_CLEAN){
                         uint8_t prt_flag = 0;
                         prt_flag = HalSafetyProc(&stHeatManager);
@@ -965,11 +964,15 @@ void task_heatting_service(void *pvParam)
                             continue;          
                         }
                     }
+					#endif
+					
+                    heat_monitor(&stHeatManager);
                     //---------------------设置输出功率--------------------------
                     if(status == 1){//添加条件判断，避免状态跳变的时候 ，还被设置功率
                         heat_set_power(stHeatManager.SetPower );   
                     }
                     //---------------------每200ms打印一次log-------------------
+                    #if 0
                     if(++puff_indv >=25){// 500ms 
                         puff_indv = 0;
                         heat_puff_proc(&stHeatManager.HeatPuff,stHeatManager.SetPower,stHeatManager.HeatingTime);
@@ -1005,6 +1008,7 @@ void task_heatting_service(void *pvParam)
                                      
                         test_20ms_adc_Convert_cnt = 0;
                     }
+					#endif
                 }
                break;
             case 2:// 串口启动加热 --------------------

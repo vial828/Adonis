@@ -430,7 +430,9 @@ static const float base_J_ref[] =
 };
 
 /* captured real temperature v.s. energy data during ramp up 10s period*/
-static const float rampup_t_e_table[206][2] = {
+static const float rampup_t_e_table[207][2] = {
+#if 0
+	{25, 0},
     {29, 5.754},
     {30, 6.967},
     {31, 8.785},
@@ -637,32 +639,245 @@ static const float rampup_t_e_table[206][2] = {
     {232, 116.684},
     {233, 118.103},
     {234, 122.425}
+#endif
+	{25, 0},
+	{29, 1.209},
+	{30, 6.967},
+	{31, 8.785},
+	{32, 9.542},
+	{33, 10.299},
+	{34, 10.905},
+	{35, 11.511},
+	{36, 12.419},
+	{37, 13.328},
+	{38, 14.085},
+	{39, 14.843},
+	{40, 15.480},
+	{41, 16.118},
+	{42, 16.675},
+	{43, 17.233},
+	{44, 17.531},
+	{45, 17.828},
+	{46, 18.126},
+	{47, 18.796},
+	{48, 19.465},
+	{49, 20.023},
+	{50, 20.580},
+	{51, 20.878},
+	{52, 21.176},
+	{53, 21.474},
+	{54, 21.920},
+	{55, 22.365},
+	{56, 22.811},
+	{57, 23.109},
+	{58, 23.406},
+	{59, 23.704},
+	{60, 24.373},
+	{61, 25.043},
+	{62, 25.601},
+	{63, 26.158},
+	{64, 26.536},
+	{65, 26.913},
+	{66, 27.291},
+	{67, 27.897},
+	{68, 28.503},
+	{69, 29.109},
+	{70, 29.514},
+	{71, 29.918},
+	{72, 30.323},
+	{73, 31.233},
+	{74, 32.142},
+	{75, 32.546},
+	{76, 32.951},
+	{77, 33.355},
+	{78, 33.860},
+	{79, 34.366},
+	{80, 34.871},
+	{81, 35.249},
+	{82, 35.628},
+	{83, 36.007},
+	{84, 36.385},
+	{85, 36.890},
+	{86, 37.395},
+	{87, 37.900},
+	{88, 38.506},
+	{89, 39.111},
+	{90, 39.717},
+	{91, 40.121},
+	{92, 40.526},
+	{93, 40.930},
+	{94, 41.249},
+	{95, 41.568},
+	{96, 41.887},
+	{97, 42.206},
+	{98, 42.876},
+	{99, 43.545},
+	{100, 43.843},
+	{101, 44.140},
+	{102, 44.438},
+	{103, 44.810},
+	{104, 45.181},
+	{105, 45.553},
+	{106, 45.832},
+	{107, 46.111},
+	{108, 46.389},
+	{109, 46.668},
+	{110, 47.227},
+	{111, 47.785},
+	{112, 48.157},
+	{113, 48.529},
+	{114, 48.901},
+	{115, 49.460},
+	{116, 50.018},
+	{117, 50.241},
+	{118, 50.465},
+	{119, 50.688},
+	{120, 50.911},
+	{121, 51.357},
+	{122, 51.803},
+	{123, 52.249},
+	{124, 52.928},
+	{125, 53.606},
+	{126, 54.111},
+	{127, 54.616},
+	{128, 55.121},
+	{129, 55.627},
+	{130, 56.133},
+	{131, 56.639},
+	{132, 57.144},
+	{133, 57.648},
+	{134, 58.153},
+	{135, 58.911},
+	{136, 59.669},
+	{137, 60.073},
+	{138, 60.477},
+	{139, 60.881},
+	{140, 61.488},
+	{141, 62.094},
+	{142, 62.701},
+	{143, 63.206},
+	{144, 63.712},
+	{145, 64.217},
+	{146, 64.975},
+	{147, 65.734},
+	{148, 66.037},
+	{149, 66.340},
+	{150, 66.644},
+	{151, 66.947},
+	{152, 67.474},
+	{153, 68.001},
+	{154, 68.528},
+	{155, 69.085},
+	{156, 69.642},
+	{157, 69.940},
+	{158, 70.238},
+	{159, 70.536},
+	{160, 71.206},
+	{161, 71.875},
+	{162, 72.097},
+	{163, 72.320},
+	{164, 72.543},
+	{165, 72.765},
+	{166, 73.436},
+	{167, 74.107},
+	{168, 74.663},
+	{169, 75.219},
+	{170, 75.665},
+	{171, 76.112},
+	{172, 76.559},
+	{173, 77.006},
+	{174, 77.453},
+	{175, 78.569},
+	{176, 78.919},
+	{177, 79.270},
+	{178, 79.620},
+	{179, 81.440},
+	{180, 82.046},
+	{181, 82.652},
+	{182, 83.157},
+	{183, 83.661},
+	{184, 84.166},
+	{185, 85.077},
+	{186, 85.988},
+	{187, 86.594},
+	{188, 87.201},
+	{189, 88.111},
+	{190, 89.020},
+	{191, 89.779},
+	{192, 90.537},
+	{193, 90.941},
+	{194, 91.345},
+	{195, 91.749},
+	{196, 92.657},
+	{197, 93.566},
+	{198, 93.851},
+	{199, 94.136},
+	{200, 94.421},
+	{201, 94.970},
+	{202, 95.519},
+	{203, 96.434},
+	{204, 96.678},
+	{205, 96.922},
+	{206, 97.166},
+	{207, 98.264},
+	{208, 98.630},
+	{209, 98.997},
+	{210, 100.096},
+	{211, 100.462},
+	{212, 100.828},
+	{213, 101.740},
+	{214, 102.290},
+	{215, 102.839},
+	{216, 103.566},
+	{217, 104.455},
+	{218, 105.320},
+	{219, 105.742},
+	{220, 106.164},
+	{221, 107.146},
+	{222, 107.783},
+	{223, 108.552},
+	{224, 109.306},
+	{225, 110.036},
+	{226, 110.744},
+	{227, 111.430},
+	{228, 112.092},
+	{229, 113.358},
+	{230, 113.962},
+	{231, 114.429},
+	{232, 115.652},
+	{233, 117.076},
+	{234, 118.457},
 };
 	
 static KalmanFilter_t kf;
 static HeatInfo_t heat;
 static uint16_t rampup_t = 0;
 static float rampup_energy = 0; //Energy to be output during the current ramp up.
-float delta_t = 0;
-
+static uint8_t shc_low_count = 0;
+static uint16_t rampup_p_out_idx = 0;
+uint8_t delta_t = 0;
+static float shc_thres = 1.30;
+static uint8_t timer = 0;
+static uint8_t power_zero_delay = 0;
+static uint16_t low_shc_timer = 0;
 static const uint16_t w_param[10][2] = 
-{	// duration in second, energy threshold in Joule
-	// 10 windows scroll from session 10sec point
+{	// window's length in second, energy threshold in Joule
+	// 10 windows scroll after ramp up
 	{10, 40},
 	{20, 80},
-	{30, 100},
-	{40, 130},
-	{50, 160},
-	{60, 200},
-	{70, 230},
-	{80, 260},
-	{90, 290},
-	{100, 320},
+	{30, 90},
+	{40, 120},
+	{50, 150},
+	{60, 180},
+	{70, 210},
+	{80, 240},
+	{90, 270},
+	{100, 300},
 };
 
 typedef struct{
-	uint8_t count;
-	float J;
+	uint8_t count; // how many numbers of the current window already passed.
+	float J;	// accumulated power till to last cycle of the window scrolling. 
 } window_t;
 
 static window_t w[10] = {0};
@@ -694,7 +909,6 @@ static void heat_info_update(HEATER* heater)
     SysStatus_u tempSysStatus = get_system_status();
     FDB_area_b1_u* p_fdb_b_info = get_fdb_b_info_handle();
 
-    // 发热体相关
     if (tempSysStatus == HEATTING_BOOST || tempSysStatus == HEATTING_STANDARD || tempSysStatus == HEATTING_CLEAN) 
 	{
         heat.pv = (int16_t)((heater->CurrDetectTemp - (float)p_fdb_b_info->fdb_b1_t.tempAdjB/100.0f)/p_fdb_b_info->fdb_b1_t.tempAdjK);
@@ -712,6 +926,25 @@ static void heat_info_update(HEATER* heater)
 	heat.time = heater->HeatingTime;
 }
 
+float set_shc_thres( float val )
+{
+	return(shc_thres = val);
+}
+
+float get_shc_thres( void )
+{
+	return(shc_thres);
+}
+
+float set_delta_t( uint8_t val )
+{
+	return(delta_t = val);
+}
+
+uint8_t get_delta_t(     void )
+{
+	return delta_t;
+}
 static uint8_t search_rampup_table(uint16_t temperature)
 {
 	for( uint8_t i = 0; i < sizeof(rampup_t_e_table)/sizeof(rampup_t_e_table[0]); i++ )
@@ -727,6 +960,13 @@ void heat_monitor_init(void)
 	memset(w, 0, sizeof(w));
 	rampup_t = 0xffff;
 	rampup_energy = 0;
+	shc_low_count = 0;
+	rampup_p_out_idx = 0;
+	delta_t = 0;
+	timer = 0;
+	power_zero_delay = 0;
+	low_shc_timer = 0;
+	
 }
 // callback each 20ms
 void heat_monitor(HEATER* heater)
@@ -735,57 +975,122 @@ void heat_monitor(HEATER* heater)
 
 	float power = 0;
 	float shc = 0;
-	static uint8_t count = 0;
 
-	if( rampup_t == 0xffff ) // first loop after heating start
+	if( heater->HeatingTime < 11000 )	
 	{
+		int16_t* ini_p = get_ini_val_info_handle();
+		float everage_p = 0;
 		uint8_t start_temperature_idx = 0;
 		
 		rampup_t = (uint16_t)heater->CurrDetectTemp;
 		start_temperature_idx = search_rampup_table(rampup_t);
 		
 		//per the index calculate the average power output during rampup phase.
-		rampup_energy = rampup_t_e_table[205][1] - rampup_t_e_table[start_temperature_idx][1];
-		sm_log( SM_LOG_INFO, "start t: %d, total J for rampup: %.3f - %3.f = %.3f \r\n", rampup_t, rampup_t_e_table[203][1], 
-			rampup_t_e_table[start_temperature_idx][1], rampup_energy );
+		rampup_energy = rampup_t_e_table[206][1] - rampup_t_e_table[start_temperature_idx][1];
+		everage_p = rampup_energy / (12.0 - heater->HeatingTime/1000);
+		// output the rampup energy in liner from high to low, total energy output during the first 12s is allocated to each 20ms cycle
+		if(ini_p[DB_FLT_TC_PWR_LIM] > 0) 
+		{
+			if(everage_p * 2 >= ((float)ini_p[DB_FLT_TC_PWR_LIM]/100 + 1.0f) || everage_p * 2  > (float)ini_p[DB_FLT_TC_PWR_LIM]/100)
+			{
+				heater->SetPower = everage_p * 2 - (float)ini_p[DB_FLT_TC_PWR_LIM]/100 + ( (float)ini_p[DB_FLT_TC_PWR_LIM]/100 - everage_p ) * 2 * ( 1 - rampup_p_out_idx / (12.0 * 50) ) ;	
+			}
+			else
+			{
+				heater->SetPower = everage_p * 2 * (1 - rampup_p_out_idx / (12 * 50) ); 
+			}
+		}
 		
-		
-	}
-
-	if( heater->HeatingTime < 11500 )	
-	{
-		heater->SetPower = rampup_energy / 11.5; // total energy output during the first 11.5s is allocated to each 20ms cycle
+		rampup_p_out_idx = (rampup_p_out_idx + 1 > 12 * 50) ? 12 * 50 : rampup_p_out_idx + 1;
 		return;
 	}
-
-	for( uint8_t i = 0; i < 10; i++ )
-	{
-		if( heater->HeatingTime >= w[i].count * w_param[i][0] * 1000 )
-		{
-			if( heater->Heating_J - w[i].J >= w_param[i][1] )
-			{
-				sm_log( SM_LOG_INFO, "w[%d].count %d energy %.3f exceed limit %d !!! \r\n", i, w[i].count, heater->Heating_J - w[i].J, w_param[i][1] );
-			}
-			w[i].J = heater->Heating_J;
-			w[i].count++;
-		}
+	if( heater->HeatingTime < 12000 )
+	{	// test code, will be removed.
+		heater->Heating_J = 0;
 	}
-	power = kalman_update(heater->CurrPowerVal);
-	shc = power * 100 / heater->CurrDetectTemp;
-	
-	if( heater->HeatingTime > 30000 )
-	{
-		if( shc < 0.8 )
+	else if( heater->HeatingTime > 12000 )
+	{	//after ramp up
+		if( heater->CurrDetectTemp > heater->CurrTargetTemp )
+			heater->SetPower = heater->SetPower > 3.6 ? 3.6 : heater->SetPower;
+		uint8_t is_exceeded = FALSE;
+#if 0
+		for( uint8_t i = 0; i < 10; i++ )
 		{
-			if( count++ > 10 );
+			if( heater->HeatingTime / 1000 >= w[i].count * w_param[i][0] )
 			{
-				sm_log( SM_LOG_INFO, "SHC %.3f is lower, stop heating !!! \r\n", power );
-				count = 0;
+				if( heater->Heating_J - w[i].J >= w_param[i][1] )
+				{
+					is_exceeded = TRUE;
+					//sm_log( SM_LOG_WARNING, "w[%d] in %d exceeded %d \r\n", i, w[i].count, w_param[i][1] );
+				}
+				w[i].J = heater->Heating_J;
+				w[i].count++;
 			}
 		}
-		else
+		if( is_exceeded )
 		{
-			count = 0;
+			if(delta_t < 20)
+			{
+				delta_t += 5;
+				sm_log( SM_LOG_WARNING, "delta_t = %d \r\n", delta_t );
+			}
+		}
+		else if( delta_t > 0 && timer++ >= 50 && heater->HeatingTime / 1000 < 290 ) //each 2secs real temperature increase 1
+		{
+			timer = 0;
+			delta_t--;
+			sm_log( SM_LOG_WARNING, "t: %d, delta_t = %d \r\n", heater->HeatingTime, delta_t );
+		}
+#endif
+		//SHC detection
+		if( power_zero_delay > 1 )
+		{
+			power_zero_delay--;
+			if( power_zero_delay == 1 )
+			{
+				delta_t = (delta_t <= 10) ? delta_t + 10 : delta_t;
+			}
+			heater->SetPower = 0;
+		}
+		else if( power_zero_delay == 1 )
+		{
+			shc = heater->SetPower * 100 / heater->CurrDetectTemp;
+			heater->Heating_J = shc;
+			if( shc < shc_thres )
+			{
+				if(++low_shc_timer / 50 > 3 )
+				{
+					power_zero_delay = 100;
+					heater->SetPower = 0;
+					low_shc_timer = 0;
+				}
+			}
+			else
+			{
+				low_shc_timer = 0;
+			}
+		}
+		else 
+		{
+			power = kalman_update(heater->SetPower);
+			shc = heater->SetPower * 100 / heater->CurrDetectTemp;
+			heater->Heating_J = shc;
+			
+			if( heater->HeatingTime > 20000 && shc < shc_thres )
+			{
+				if( shc_low_count++ > 10 )
+				{
+					power_zero_delay = 100;
+					heater->SetPower = 0;
+					
+					sm_log( SM_LOG_WARNING, "SHC %.3f is lower than %.3f, stop heating !!! \r\n", shc, shc_thres );
+					shc_low_count = 0;
+				}
+			}
+			else
+			{
+				shc_low_count = 0;
+			}
 		}
 	}
 	
