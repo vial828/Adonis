@@ -9,3 +9,5 @@
 /Adonis_1P_App/.metadata/.plugins/org.eclipse.cdt.core/adonis1p.1715518878424.pdom
 
 /.metadata
+*.log
+*.pdom
