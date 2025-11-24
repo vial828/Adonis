@@ -142,6 +142,7 @@ typedef enum
 #define PROC_CMD_SetDeltaT				0xE0
 #define PROC_CMD_SetWThres				0xE1
 #define PROC_CMD_SetSHC_THRES			0xE2
+#define PROC_CMD_SetPOWER				0xE3
 
 //case pen protoclo
 typedef struct

@@ -952,6 +952,7 @@ void task_heatting_service(void *pvParam)
                                                         stHeatManager.HeatingTime);
             
                     stHeatManager.SetPower = range_1000_0_to_power(heat_out,MAX_POWER);//PID输出 0 - 1000 转化为 0 - power_max W
+                    heat_monitor(&stHeatManager);
                     stHeatManager.Heating_J += stHeatManager.CurrPowerVal/50;//1焦耳 = 1WS 
                     //---------------------保护算法逻辑--------------------------
 					#if 0
@@ -966,7 +967,6 @@ void task_heatting_service(void *pvParam)
                     }
 					#endif
 					
-                    heat_monitor(&stHeatManager);
                     //---------------------设置输出功率--------------------------
                     if(status == 1){//添加条件判断，避免状态跳变的时候 ，还被设置功率
                         heat_set_power(stHeatManager.SetPower );   

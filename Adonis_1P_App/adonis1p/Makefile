@@ -221,9 +221,9 @@ ifeq ($(OTA_SUPPORT),1)
     #
     # export APP_VERSION_MAJOR=2
     #
-    OTA_APP_VERSION_MAJOR?=4
-    OTA_APP_VERSION_MINOR?=1
-    OTA_APP_VERSION_BUILD?=1
+    OTA_APP_VERSION_MAJOR?=16
+    OTA_APP_VERSION_MINOR?=2
+    OTA_APP_VERSION_BUILD?=0
 
 	# Build location local to this root directory.
 	CY_BUILD_LOC:=./build

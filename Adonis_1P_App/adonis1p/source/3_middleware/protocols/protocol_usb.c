@@ -2716,6 +2716,14 @@ static uint16_t cmd_set_shc_thres(ProtocolBase_t *pBuf)
 	return 1;
 }
 
+static uint16_t cmd_set_power(ProtocolBase_t *pBuf)
+{
+	
+	set_power( (float)pBuf->pData[0] );
+    sm_log(SM_LOG_NOTICE, "power = %.3f\r\n", get_power());
+	return 1;
+}
+
 extern uint8_t app_bt_adv_conn_state;
 extern bool app_bt_gatt_is_connected(void);
 /*---------------------------------------------------------------------------*/
@@ -3042,6 +3050,7 @@ static const CmdProtocol_t cmdListUsb[]=
     {PROC_CMD_GetSPVerPinBrokeParam,    cmd_get_set_sp_pin_broke_threshold},
     {PROC_CMD_SetDeltaT,    cmd_set_delta_t},
     {PROC_CMD_SetSHC_THRES,    cmd_set_shc_thres},
+    {PROC_CMD_SetPOWER,    cmd_set_power},
 };
 
 int filter_cmd_rdp_on(ProtocolBase_t *pFrame)
