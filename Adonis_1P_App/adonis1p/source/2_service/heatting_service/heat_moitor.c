@@ -651,11 +651,12 @@ static HeatInfo_t heat;
 static float rampup_energy = 0; //Energy to be output during the current ramp up.
 static float average_p = 0;
 static uint16_t full_power_t = 0;
-uint8_t delta_t = 0;
+uint8_t delta_t = 0; // range of [0:30]
 static uint8_t target_delta_t = 0;
 static uint16_t delay_after_deltaT_changed = 0;
-static float shc_thres = 1.30;
+static float shc_thres = 1.0;
 static uint8_t low_shc_count = 0;
+static uint32_t last_low_shc_time = 0;
 static float power_to_keep_temp = 0;
 static const uint16_t w_param[10][2] = 
 {	// window's length in second, energy threshold in Joule
@@ -772,6 +773,7 @@ void heat_monitor_init(void)
 	delta_t = 0;
 	target_delta_t = 0;
 	low_shc_count = 0;
+	last_low_shc_time = 0;
 	power_to_keep_temp = 0;
 	delay_after_deltaT_changed = 0;
 	
@@ -821,19 +823,26 @@ void heat_monitor(HEATER* heater)
 			heater->SetPower = heater->SetPower > 2.5 ? 2.5 : heater->SetPower;
 
 		shc = heater->SetPower * 100 / (heater->CurrDetectTemp - delta_t);
-		heater->Heating_J = shc;
+		heater->Heating_J = 0;
 	}
 	else 
 	{	// > 12s
 		//SHC detection
 		shc = heater->SetPower * 100 / (heater->CurrDetectTemp - delta_t);
 		heater->Heating_J = shc;
+
+		if( heater->HeatingTime > 30000 && shc <= shc_thres )
+		{
+			last_low_shc_time = heater->HeatingTime;
+		}
+		
 		if( heater->HeatingTime > 30000 && delay_after_deltaT_changed == 0 )
 		{
-			if( shc <= shc_thres )
+			if( shc <= shc_thres && heater->CurrDetectTemp <= heater->CurrTargetTemp )
 			{
-				if( ++low_shc_count > 3 )
+				if( ++low_shc_count > 50 ) // continue to detect low shc more than 1s
 				{
+					low_shc_count = 0;
 					target_delta_t += target_delta_t > 20? 0 : 10;
 					delay_after_deltaT_changed = 400; // 8s later check again
 					sm_log( SM_LOG_WARNING, "t: %d SHC %.3f. target delta %d up\r\n", heater->HeatingTime, shc, target_delta_t);
@@ -844,7 +853,7 @@ void heat_monitor(HEATER* heater)
 					}
 				}
 			}
-			else
+			else if( heater->CurrDetectTemp >= heater->CurrTargetTemp - 2 ) // only when temp. is close to target temp. the SHC is more stable to detect
 			{
 				low_shc_count = 0;
 				if( target_delta_t > 10 )
@@ -855,16 +864,18 @@ void heat_monitor(HEATER* heater)
 				}
 				else if( target_delta_t == 10 && shc > 1.6 )
 				{
-					target_delta_t -= 10;
-					delay_after_deltaT_changed = 250; // 5s later check again
-					sm_log( SM_LOG_WARNING, "t: %d SHC %.3f. target delta down %d \r\n", heater->HeatingTime, shc, target_delta_t);
+					//target_delta_t -= 10;
+					//delay_after_deltaT_changed = 250; // 5s later check again
+					//sm_log( SM_LOG_WARNING, "t: %d SHC %.3f. target delta down %d \r\n", heater->HeatingTime, shc, target_delta_t);
 				}
 			}
 			
 		}
 
-		delta_t += target_delta_t > delta_t ? 1: (target_delta_t == delta_t ? 0: -1);
 		delay_after_deltaT_changed = delay_after_deltaT_changed > 0? delay_after_deltaT_changed -1 : 0;
+		//delta_t roll back to target value in step of 200ms, so roll back of a gap value 10 will need 2ses 
+		if( delay_after_deltaT_changed % 10 == 0 )
+			delta_t += target_delta_t > delta_t ? 1: (target_delta_t == delta_t ? 0: -1);
 	}
 }
 

@@ -777,8 +777,8 @@ float fun_get_algorithm_power(float target, float pv,unsigned int time){
 
     if ( time < 8*1000)
     {
-        g_increase_pid.ut  =  get_time_power(time);
-        fun_increase_pid_dumy(target,pv);
+        //g_increase_pid.ut  =  get_time_power(time);
+       // fun_increase_pid_dumy(target,pv);
     }else {
         g_increase_pid.ut  =  fun_increase_pid_algorithm(target,pv);
     }
