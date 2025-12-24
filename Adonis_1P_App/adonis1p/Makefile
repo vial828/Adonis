@@ -222,7 +222,7 @@ ifeq ($(OTA_SUPPORT),1)
     # export APP_VERSION_MAJOR=2
     #
     OTA_APP_VERSION_MAJOR?=16
-    OTA_APP_VERSION_MINOR?=3
+    OTA_APP_VERSION_MINOR?=5
     OTA_APP_VERSION_BUILD?=0
 
 	# Build location local to this root directory.
